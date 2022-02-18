@@ -1,8 +1,10 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import "../../css/index.css"
 import icon from "../../images/recognition_2_face.png"
 import "flowbite"
+
 export default class NavBar extends React.Component{
+
 
     constructor(props = {}){
         super(props);
@@ -10,7 +12,7 @@ export default class NavBar extends React.Component{
 
 
     render() {
-        return(	<nav className="bg-blue-200 border-gray-200 px-2">
+        return(	<nav className="bg-blue-200 border-gray-200 px-2 rounded p-2">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <a href="#" className="flex">
             <img src={icon}/>
@@ -26,7 +28,7 @@ export default class NavBar extends React.Component{
                 <a href="#" className="bg-blue-700 md:bg-transparent text-white block pl-3 pr-4 py-2 md:text-blue-700 md:p-0 rounded" aria-current="page">Home</a>
               </li>
               <li>
-                <a href="#" className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0">Test</a>
+                <a href="#" className="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0 rounded">Test</a>
               </li>
             </ul>
           </div>

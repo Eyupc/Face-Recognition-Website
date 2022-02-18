@@ -1,9 +1,10 @@
 import React from "react";
 import Chart from 'react-apexcharts'
+import { ApexCharts } from "./IChart";
 
-export default class StatsChart extends React.Component{
+export default class StatsChart extends React.Component<ApexChart,any>{
 
-    constructor(props = {}) {
+    constructor(props={}) {
         super(props);
 
         this.state = {
@@ -44,12 +45,15 @@ export default class StatsChart extends React.Component{
         
         };
     
+      
       }
 
     
 
       render() {
         return (<div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="line" height={350} />
+<Chart options={this.state.options} series={this.state.series} type="line" height={450} />
 </div>)
+
+      }
 }
