@@ -16,7 +16,7 @@ export default class HomePage extends React.Component{
             <div className="mb-6">
                   <NavBar/>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 p-4">
                   <StatsCard/>
                   </div>
                     </div>

@@ -8,9 +8,8 @@ export class StatsCard extends React.Component{
 
     render(): React.ReactNode {
         return(<>
-        <div className="container max-w-6xl px-5 mx-auto my-28">
         <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="p-5 bg-white rounded shadow-sm">
+          <div className="p-5 bg-white rounded shadow-xl">
                     <div className="flex items-center space-x-4">
                         <div>
                             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-fuchsia-50 text-fuchsia-400">
@@ -20,12 +19,12 @@ export class StatsCard extends React.Component{
                             </div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Total Sales</div>
-                            <div className="text-2xl font-bold text-gray-900">$9850.90</div>
+                            <div className="text-gray-400">Runtime</div>
+                            <div className="text-2xl font-bold text-gray-900">%time%</div>
                         </div>
                     </div>
                 </div>
-                <div className="p-5 bg-white rounded shadow-sm">
+                <div className="p-5 bg-white rounded shadow-xl">
                     <div className="flex items-center space-x-4">
                         <div>
                             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-50 text-cyan-400">
@@ -36,12 +35,12 @@ export class StatsCard extends React.Component{
                             </div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Net Revenue</div>
-                            <div className="text-2xl font-bold text-gray-900">$7520.50</div>
+                            <div className="text-gray-400">Users</div>
+                            <div className="text-2xl font-bold text-gray-900">%users%</div>
                         </div>
                     </div>
                 </div>
-                <div className="p-5 bg-white rounded shadow-sm">
+                <div className="p-5 bg-white rounded shadow-xl">
                     <div className="flex items-center space-x-4">
                         <div>
                             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-400">
@@ -52,12 +51,12 @@ export class StatsCard extends React.Component{
                             </div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Customers</div>
-                            <div className="text-2xl font-bold text-gray-900">1375</div>
+                            <div className="text-gray-400">Staffs</div>
+                            <div className="text-2xl font-bold text-gray-900">%staffs%</div>
                         </div>
                     </div>
                 </div>
-                <div className="p-5 bg-white rounded shadow-sm">
+                <div className="p-5 bg-white rounded shadow-xl">
                     <div className="flex items-center space-x-4">
                         <div>
                             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-400">
@@ -67,14 +66,12 @@ export class StatsCard extends React.Component{
                             </div>
                         </div>
                         <div>
-                            <div className="text-gray-400">MRR</div>
-                            <div className="text-2xl font-bold text-gray-900">$250.00</div>
+                            <div className="text-gray-400">Staffs Online</div>
+                            <div className="text-2xl font-bold text-gray-900">%online%</div>
                         </div>
                     </div>
-                </div></div></div></>
+                </div></div></>
               )
     }
-
-    
     
 }
