@@ -6,9 +6,10 @@ import { NavLink } from "react-router-dom";
 
 export default class NavBar extends React.Component{
 
-
-    constructor(props = {}){
+    
+    constructor(props:any){
         super(props);
+        
     }
 
 
@@ -26,12 +27,12 @@ export default class NavBar extends React.Component{
           <div className="hidden md:block w-full md:w-auto p-4" id="mobile-menu">
             <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
               <li>
-  <NavLink className="bg-blue-700 md:bg-transparent text-white block pl-3 pr-4 py-2 md:text-blue-700 md:p-0 rounded" to="/home">
+  <NavLink className={({isActive})=>  (isActive ? "md:text-blue-700 bg-blue-700" :"md:text-white bg-[#adc9eb]") + " md:bg-transparent text-white block pl-3 pr-4 py-2 md:p-0 rounded"} to="/home">
   Home
 </NavLink>
               </li>
               <li>
-              <NavLink className="bg-blue-200 md:bg-transparent text-white block pl-3 pr-4 py-2 md:text-blue-700 md:p-0 rounded" to="/stream">
+              <NavLink className={({isActive})=> (isActive ? "md:text-blue-700 bg-blue-700" :"md:text-white bg-[#adc9eb]") + " md:bg-transparent text-white block pl-3 pr-4 py-2 md:p-0 rounded"} to="/stream">
   Stream
 </NavLink>
               </li>
