@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
 
 
@@ -7,53 +8,27 @@ type MessageState = {
 }
 
 export class StreamPage extends React.Component<{},MessageState> {
+private WSClient:WSClient;
 private ws:WebSocket;
-private encoder:TextEncoder;
-private decoder:TextDecoder;
 
 private id:string | undefined;
 private PingEvent:any | undefined;
 
 constructor(props = {}){
     super(props);
-    this.encoder = new TextEncoder()
-    this.decoder = new TextDecoder()
-    this.ws = new WebSocket("ws://10.3.41.63:7777");
-    this.ws.binaryType = "arraybuffer";
-    this.ws.onopen = () => this.onOpen();
-    this.ws.onmessage = (msg) => this.onMessage(msg);
-    this.ws.onerror = (err) => this.onError(err);
-    this.ws.onclose = () => this.onClose();
+    this.WSClient = new WSClient("localhost",7777,false,"StreamPage");
+    this.ws= this.WSClient.websocket; 
 
+    this.ws.onmessage = (msg) => this.onMessage(msg);
     this.state = {
         "image":""
     }
-
+    
 }
 
-onOpen():void {
-this.id =Math.random().toString(36).substring(2);
-let json  = `{"header":"ConnectionEvent","data":[{"id":"${this.id}"}]}`;
-this.ws.send(this.encoder.encode(json))
-this.PingPong(this.ws); //Ping Pong event every {amount} sec.
-}
-
-private PingPong(websocket:WebSocket){
-    let data = {
-        "header":"PingEvent",
-        "data":[{
-            "message":"Pong"
-        }]
-    }
-    let encoder = this.encoder;
-    this.PingEvent = setInterval(function(){
-
-        websocket.send(encoder.encode(JSON.stringify(data))) //send ping
-    },1000); //every 3 secs a ping pong event
-}
 
 onMessage(msg:any){
-    let incoming = JSON.parse(this.decoder.decode(msg.data));
+    let incoming = JSON.parse(this.WSClient.decoder.decode(msg.data));
     if(incoming.header == "StreamEvent"){
     this.setState(()=>{
         return{image:'data:image/jpg;base64,'+incoming.data[0].message}
@@ -61,21 +36,11 @@ onMessage(msg:any){
     }
 }
 
-onError(err:any){
 
-    console.log("Error: "+ err.toString());
-}
 
-onClose(){
-    console.log("Closed!")
-    clearInterval(this.PingEvent)
-    this.setState(()=>{
-        return{image:""}
-   });
-}
 
 render() {
-    let message = (this.state.image != "" ? <img src={this.state.image}/> : "Connection closed :(")
+    let message = ((this.ws.readyState === this.ws.OPEN) ? <img src={this.state.image}/> : "Connection closed :(")
 return(<div className="flex flex-col justify-center items-center h-screen sm:h-screen">
 <div className="md:flex box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200	-500 m4 rounded">
     <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">

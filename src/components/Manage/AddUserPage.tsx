@@ -1,25 +1,48 @@
 import React from "react";
+import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
 
 
 export class AddUserPage extends React.Component {
+  
+  private images_encoded: string[] = [];
   private reader = new FileReader();
+  private WSClient:WSClient;
+  private ws:WebSocket;
 
-    constructor(props={}){
+  constructor(props={}){
         super(props)
+        this.WSClient = new WSClient("192.168.0.180",7777,false,"AddUserPage");
+        this.ws = this.WSClient.websocket;
+        this.ws.onmessage = (msg) => this.onMessage(msg)
+    }
+    
+    onMessage(msg:any){
+      
     }
 
-    state = {
-        images_encoded: []
-      }
+    SendData(json:string){
+      if(this.ws.OPEN === this.ws.readyState)
+      this.ws.send((this.WSClient.encoder.encode(json)));
+      else
+      console.log("ERROR: Websocket connection is closed")
+    }
     
-       async fileSelectedHandler(e:any):Promise<void> {
+    
+    async fileSelectedHandler(e:any):Promise<void> {
         var img:string = "";
         for(let i = 0; i<=e.target.files.length-1; i++){
+        
+        let t = e.target.files[i].type.split('/').pop().toLowerCase();
+        if (t != "jpeg" && t != "jpg" && t != "png" && t != "bmp" && t != "gif")
+        continue;
+    
+        
+
         await this.getBase64(e.target.files[i]).then((data:any)=>{
           img = data.replace("data:", "").replace(/^.+,/, "");
 
-          this.setState({ images_encoded: [...this.state.images_encoded, img] })
+          this.images_encoded.push(img);
           //console.log(this.state.images_encoded)
 
           //document.getElementById("image")!.setAttribute("src",img);
@@ -28,7 +51,7 @@ export class AddUserPage extends React.Component {
       }
     }
 
-       getBase64(file:any) {
+       getBase64(file:any) { //TODO -> image size reduce
         return new Promise((resolve, reject) => {
           const reader = this.reader;
           reader.readAsDataURL(file);
@@ -38,14 +61,24 @@ export class AddUserPage extends React.Component {
       }
 
       onSubmit(e:any){
-        document.getElementById("name")!.setAttribute("value","")
-        document.getElementById("lastname")!.setAttribute("value","")
-        document.getElementById("age")!.setAttribute("value","")
-        document.getElementById("files")!.setAttribute("value","")
+        let json = {
+          header:"AddUserEvent",
+          data:[{
+            "id":this.WSClient.userId,
+            "name":(document.getElementById("name") as HTMLInputElement)!.value,
+            "lastname":(document.getElementById("lastname") as HTMLInputElement)!.value,
+            "age":(document.getElementById("age") as HTMLInputElement)!.value,
+            "images":this.images_encoded,
+          }]
+        }
+        this.SendData(JSON.stringify(json));
+        (document.getElementById("name") as HTMLInputElement)!.value = "";
+        (document.getElementById("lastname") as HTMLInputElement)!.value = "";
+        (document.getElementById("age") as HTMLInputElement)!.value = "";
+        (document.getElementById("files") as HTMLInputElement)!.value = "";
         e.preventDefault();
-
-
       }
+
     render(){
         return(
         <form onSubmit={(e)=>this.onSubmit(e)} ><div className="flex flex-col justify-center items-center h-screen">
@@ -88,7 +121,7 @@ type="number" min="1" name="Age" required/>
 <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" htmlFor="Fotos">
         Foto's:
       </label>
-        <input type="file" className="w-64"  id="files" name="file" multiple onChange={(e)=>this.fileSelectedHandler(e)} required/><br/>
+        <input type="file" className="w-64"  id="files" accept="image/*"  name="file" multiple onChange={(e)=>this.fileSelectedHandler(e)} required/><br/>
 </div></div>
 
   <div className="md:flex md:items-center">

@@ -18,10 +18,6 @@ export default class NavBar extends React.Component<{},Props>{
     }
 
 
-    componentDidMount(){
-      console.log("oke")
-    }
-
     toggleNav() {
       this.setState({ 
           showNav: !this.state.showNav
