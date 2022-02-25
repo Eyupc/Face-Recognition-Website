@@ -1,6 +1,7 @@
 import React from "react";
 import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
+import imageCompression from 'browser-image-compression';
 
 
 export class AddUserPage extends React.Component {
@@ -12,7 +13,7 @@ export class AddUserPage extends React.Component {
 
   constructor(props={}){
         super(props)
-        this.WSClient = new WSClient("192.168.0.180",7777,false,"AddUserPage");
+        this.WSClient = new WSClient("localhost",7777,false,"AddUserPage");
         this.ws = this.WSClient.websocket;
         this.ws.onmessage = (msg) => this.onMessage(msg)
     }
@@ -30,19 +31,25 @@ export class AddUserPage extends React.Component {
     
     
     async fileSelectedHandler(e:any):Promise<void> {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 500,
+        useWebWorker: true
+      }
+
         var img:string = "";
         for(let i = 0; i<=e.target.files.length-1; i++){
-        
         let t = e.target.files[i].type.split('/').pop().toLowerCase();
         if (t != "jpeg" && t != "jpg" && t != "png" && t != "bmp" && t != "gif")
         continue;
     
-        
-
-        await this.getBase64(e.target.files[i]).then((data:any)=>{
+        let compressedFile = await imageCompression(e.target.files[i], options);
+        //console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); //
+        await this.getBase64(compressedFile).then((data:any)=>{
           img = data.replace("data:", "").replace(/^.+,/, "");
 
           this.images_encoded.push(img);
+          document.getElementById("img")!.setAttribute("src",'data:image/jpg;base64,'+img)
           //console.log(this.state.images_encoded)
 
           //document.getElementById("image")!.setAttribute("src",img);
@@ -61,6 +68,9 @@ export class AddUserPage extends React.Component {
       }
 
       onSubmit(e:any){
+        if(this.images_encoded.length == 0)
+          return;
+
         let json = {
           header:"AddUserEvent",
           data:[{
@@ -128,6 +138,7 @@ type="number" min="1" name="Age" required/>
 <div className="md:w-1/6">
 <input style={{cursor:"pointer"}} className="w-64 h-10 px-5 m-2 text-blue-100 transition-colors duration-150 bg-blue-400 rounded-lg focus:shadow-outline hover:bg-blue-500" type="submit" value="Verander!"/>
 </div></div>
+<img src="" id="img"></img>
 </div>
                       </div>
                   </div></div></div></form>
