@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
 import imageCompression from 'browser-image-compression';
@@ -89,7 +89,7 @@ export class AddUserPage extends React.Component<{},State> {
         });
       }
 
-      onSubmit(e:any){
+      onSubmit(e:SyntheticEvent){
         e.preventDefault();
         if(this.images_encoded.length == 0)
           return;

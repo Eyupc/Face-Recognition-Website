@@ -1,22 +1,20 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import "../../css/index.css"
 import icon from "../../images/recognition_2_face.png"
 import "flowbite"
-import { NavLink } from "react-router-dom";
+import { NavLink,HistoryRouterProps, Outlet, Navigate } from "react-router-dom";
+import axios from "axios";
 
 type Props ={
-  "showNav":boolean
+  showNav:boolean,
+  logout:boolean,
 }
 export default class NavBar extends React.Component<{},Props>{
-
-    
     constructor(props:Props){
         super(props);
-        
-        this.state = { showNav: false };
+        this.state = { showNav: false,logout:false};
         this.toggleNav = this.toggleNav.bind(this);
     }
-
 
     toggleNav() {
       this.setState({ 
@@ -24,8 +22,20 @@ export default class NavBar extends React.Component<{},Props>{
       })
   }
 
+  async logout(){
+    await axios.post("http://localhost:8080/auth/logout",{},{headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true
+  });
+  this.setState({logout:true})
+  }
+ 
+
     render() {
-        return(	<nav className="bg-blue-200 border-gray-200 px-2 rounded p-2">
+        if(this.state.logout)
+        return <Navigate replace to="/"/>
+        return(<nav className="bg-blue-200 border-gray-200 px-2 rounded p-2">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <a href="#" className="flex">
             <img src={icon}/>
@@ -36,15 +46,20 @@ export default class NavBar extends React.Component<{},Props>{
             <svg className="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
           </button>
           <div className={(this.state.showNav ? "collapse navbar-collapse" : "") + "hidden md:block w-full md:w-auto p-4"}>
-            <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
+            <ul className="flex-col md:flex-row flex md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium" >
               <li>
   <NavLink className={({isActive})=>  (isActive ? "md:text-blue-700 bg-blue-700" :"md:hover:text-cyan-700  bg-[#adc9eb]") + " md:bg-transparent  block pl-3 pr-4 py-2 md:p-0 rounded"} to="/home">
   Home
 </NavLink>
               </li>
               <li>
-              <NavLink className={({isActive})=> (isActive ? "md:text-blue-700 bg-blue-700" :"md:hover:text-cyan-700 0 bg-[#adc9eb]") + " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="/stream">
+              <NavLink  className={({isActive})=> (isActive ? "md:text-blue-700 bg-blue-700" :"md:hover:text-cyan-700 0 bg-[#adc9eb]") + " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="/stream" end>
   Stream
+</NavLink>
+              </li>
+              <li>
+              <NavLink onClick={()=>this.logout()}  className={"md:text-orange-800 bg-[#adc9eb] md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="" end>
+  Logout
 </NavLink>
               </li>
             </ul>
