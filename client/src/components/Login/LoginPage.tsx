@@ -32,6 +32,7 @@ export default class LoginPage extends React.Component<{},UserData>{
         withCredentials: true
       }
       ).then(resp=>{
+        console.log(resp.data)
        if(resp.data.status ==="success"){
         const decoded = jwt(resp.data.token);
         this.setState({redirect:true});

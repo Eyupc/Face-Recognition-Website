@@ -58,6 +58,15 @@ export default class NavBar extends React.Component<{},Props>{
 </NavLink>
               </li>
               <li>
+              <NavLink  className={({isActive})=> (isActive ? "md:text-blue-700 bg-blue-700" :"md:hover:text-cyan-700 0 bg-[#adc9eb]") + " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="/manage/add" end>
+  Add user
+</NavLink>
+
+              </li>
+              <li>              <NavLink  className={({isActive})=> (isActive ? "md:text-blue-700 bg-blue-700" :"md:hover:text-cyan-700 0 bg-[#adc9eb]") + " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="/manage/delete" end>
+  Delete user
+</NavLink></li>
+              <li>
               <NavLink onClick={()=>this.logout()}  className={"md:text-orange-800 bg-[#adc9eb] md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"} to="" end>
   Logout
 </NavLink>

@@ -9,6 +9,7 @@ import { AuthManager } from "./auth/AuthManager";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { ErrorPage } from "../components/Error/ErrorPage";
 import LoadingPage from "../components/Loading/LoadingPage";
+import DeleteUserPage from "../components/Manage/DeleteUserPage";
 
 
 
@@ -38,6 +39,7 @@ export default class AppRoutes extends React.Component<{},Auth> {
 			        <Route path="/" element={<Outlet />}/>
                     <Route path="/home" element={<HomePage />} /><Route path="/stream" element={<StreamPage />} />
                     <Route path="/manage/add" element={<AddUserPage />} />
+                    <Route path="/manage/delete" element= {<DeleteUserPage/>}/>
             </Route>
             <Route path='*' element={<ErrorPage/>} />
             </Routes>

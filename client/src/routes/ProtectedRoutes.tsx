@@ -4,6 +4,7 @@ import {Navigate, Outlet, useLocation, useRoutes} from "react-router-dom"
 import { AuthManager } from "./auth/AuthManager"
 import jwt from "jwt-decode";
 import LoadingPage from "../components/Loading/LoadingPage";
+import { cp } from "fs/promises";
 
 type ProtectedRouteType = {
 	auth: true | false,
@@ -29,7 +30,7 @@ const ProtectedRoutes = (props: ProtectedRouteType) => {
                 }catch(e){
                 setUser(null);
                 }
-               setLoading(false);     
+               setLoading(false);
            }
            check();
            

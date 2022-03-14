@@ -119,8 +119,7 @@ export class AddUserPage extends React.Component<{},State> {
       }
 
     render(){
-        return(
-        <form onSubmit={(e)=>this.onSubmit(e)} ><div className="flex flex-col justify-center items-center h-screen">
+        return(<form onSubmit={(e)=>this.onSubmit(e)} ><div className="flex flex-col justify-center items-center h-screen">
         <div className="md:flex box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200	-500 m4 rounded">
             <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
             <div className="flex flex-col md:flex-col">
@@ -145,7 +144,7 @@ export class AddUserPage extends React.Component<{},State> {
 </div></div>
 : <></>}
   <div className="md:flex md:items-center mb-6">
-<div className="md:w-full">
+<div className="md:w-2/3">
 <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" htmlFor="Name">
         Name:
       </label>
@@ -155,7 +154,7 @@ type="text" name="Name" required/>
 
 <div className="md:flex md:items-center mb-6">
 
-<div className="md:w-full">
+<div className="md:w-2/3">
 <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" htmlFor="Lastname">
         Lastname: 
       </label>
@@ -181,7 +180,7 @@ type="number" min="1" name="Age" required/>
 
   <div className="md:flex md:items-center">
 <div className="md:w-1/6">
-<input style={{cursor:"pointer"}} className="w-64 h-10 px-5 m-2 text-blue-100 transition-colors duration-150 bg-blue-400 rounded-lg focus:shadow-outline hover:bg-blue-500" type="submit" value="Verander!"/>
+<input style={{cursor:"pointer"}} className="w-64 h-10 px-5 m-2 text-blue-100 transition-colors duration-150 bg-blue-400 rounded-lg focus:shadow-outline hover:bg-blue-500" type="submit" value="Voeg toe!"/>
 </div></div>
 </div>
                       </div>

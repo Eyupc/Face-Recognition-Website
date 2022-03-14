@@ -3,7 +3,7 @@ import { HTTPServer } from "./HTTP/HTTPServer";
 
 export class Main {
 public static http = new HTTPServer("localhost",8080)
-public static databaseService = new DatabaseService("localhost",27017,"face-recognition")
+public static databaseService = new DatabaseService("0.0.0.0",27017,"face-recognition")
 
 constructor(){
     Main.http.Start()
