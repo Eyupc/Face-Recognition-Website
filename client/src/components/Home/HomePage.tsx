@@ -18,7 +18,7 @@ export default class HomePage extends React.Component{
 
     render(){
 
-        return(<div className="flex flex-col justify-center items-center h-full sm:h-screen">
+        return(<div className="flex flex-col justify-center items-center xl:h-screen md:h-full lg:h-full">
         <div className="md:flex box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200	-500 m4 rounded">
             <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
             <div className="flex flex-col md:flex-col">

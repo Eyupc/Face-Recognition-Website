@@ -37,7 +37,7 @@ export class HTTPServer{
         this._express.use(cookieParser())
         this._express.use(bodyParser.json())
         this._express.use(cors({
-            origin: 'http://localhost:3000',
+            origin: ['http://localhost:3000','http://192.168.0.180:3000'],
             methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
             credentials: true
           }))
@@ -56,7 +56,7 @@ export class HTTPServer{
         this._express.post("/auth/login",async (req,res)=>{
         let login = await Main.databaseService.tryToLogin(String(req.body.username),String(req.body.password));
         if(JSON.parse(login).status === "success"){
-        let token = jsonToken.sign({ data:JSON.parse(login).data }, this.secret,{expiresIn:"180m"});
+        let token = jsonToken.sign({ data:JSON.parse(login).data }, this.secret,{expiresIn:"120m"});
         res.cookie("FC_SESSION", token,
                 {
                     expires: new Date(new Date().setHours(new Date().getHours() + 1)),
@@ -75,39 +75,51 @@ export class HTTPServer{
     })
 
     this._express.get("/auth/check",async (req,res,next)=>{
-    await this.checkAuth(req,res,next);
+    await this.checkAuth(req,res,next,true);
     })
 
     this._express.post("/auth/logout",async(req,res,next)=>{
+        if(req.cookies.FC_SESSION){
        await this.RedisClient.getClient().hSet("tokens",req.cookies.FC_SESSION.toString());
         res.clearCookie("FC_SESSION");
         res.end();
+        }
+    })
+
+    this._express.get("/admin/deleteUsers",async(req,res,next)=>{
+        let auth = await this.checkAuth(req, res, next, false);
+      if(JSON.parse(auth).status =="failed"){
+      res.send(auth);
+      return;
+      }
+      res.send(await Main.databaseService.query({collection:"users_whitelisted",params:{}}))
+      console.log("ok")
     })
 
 }
-    async checkAuth(req:express.Request,res:express.Response,next:express.NextFunction){
-    if(!req.cookies.FC_SESSION){
-        res.send(JSON.stringify({status:"failed"}));
-        return;
+    async checkAuth(req:express.Request,res:express.Response,next:express.NextFunction,send:boolean):Promise<any>{
+        let returnVal = null;
+        if(!req.cookies.FC_SESSION){
+        returnVal =  (send ? res.send(JSON.stringify({status:"failed"})) : JSON.stringify({status:"failed"}));
+        
         }
-
-
     var tokens = await this.RedisClient.getClient().hKeys("tokens");
     if(tokens.includes(req.cookies.FC_SESSION)){
         res.clearCookie("FC_SESSION");
-        res.send(JSON.stringify({status:"failed",reason:"Invalid token"}));
-        return; 
+        returnVal =  (send ? res.send(JSON.stringify({status:"failed",reason:"Invalid token"})) : JSON.stringify({status:"failed",reason:"Invalid token"})); 
     }
-    console.log(tokens)
+   // console.log(tokens)
 
-    if(res)
+    if(res){
     jsonToken.verify(req.cookies.FC_SESSION,this.secret,(err:any,user:any)=>{
     if(err){
-        res.send(JSON.stringify({status:"failed",reason:"Invalid token"})); 
+        returnVal =  (send ? res.send(JSON.stringify({status:"failed",reason:"Invalid token"})) : JSON.stringify({status:"failed",reason:"Invalid token"})); 
     }else{
+    returnVal =  (send ? res.send(JSON.stringify({status:"success",token:req.cookies.FC_SESSION})) : JSON.stringify({status:"success",token:req.cookies.FC_SESSION}));
+    }})
+}
+return returnVal;
 
-    res.send(JSON.stringify({status:"success",token:req.cookies.FC_SESSION}));
-    }});
 }
 
     

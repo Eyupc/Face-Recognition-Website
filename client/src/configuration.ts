@@ -1,4 +1,5 @@
 
 export const configuration = {
-    URL:"localhost:3000",
+    API_URL:"http://192.168.0.180:8080",
 }
+

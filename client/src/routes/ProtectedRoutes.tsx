@@ -22,7 +22,8 @@ const ProtectedRoutes = (props: ProtectedRouteType) => {
    const {pathname} = useLocation();
     useEffect(()=>{
     async function check(){
-            const {status,data}= await AuthManager.checkLoggedIn();  
+        
+            const {status,data}= await AuthManager.checkLoggedIn(); 
             _status = status;
             _data = data;
                 try{

@@ -13,19 +13,9 @@ import DeleteUserPage from "../components/Manage/DeleteUserPage";
 
 
 
-type Auth = {
-    isAuth:boolean,
-    isLoading:boolean,
-
-}
-export default class AppRoutes extends React.Component<{},Auth> {
+export default class AppRoutes extends React.Component<{}> {
     constructor(props={}){
         super(props)
-        this.state = {isAuth:false,isLoading:true}
-    }
- 
-    componentWillUnmount(){
-        console.log("ok")
     }
     render(){
         return(<BrowserRouter>

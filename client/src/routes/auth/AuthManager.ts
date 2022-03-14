@@ -1,11 +1,12 @@
 import axios from "axios";
+import { configuration } from "../../configuration";
 
 export class AuthManager {
 
 
 public static async checkLoggedIn():Promise<{status:boolean,data:any}>{ // return true if the user is logged in
     let val = {status:false,data:null};
-    await axios.get("http://localhost:8080/auth/check", {headers: {
+    await axios.get(configuration.API_URL +"/auth/check", {headers: {
         'Content-Type': 'application/json'
       },
       withCredentials: true}).then(resp=>{

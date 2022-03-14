@@ -119,8 +119,8 @@ export class AddUserPage extends React.Component<{},State> {
       }
 
     render(){
-        return(<form onSubmit={(e)=>this.onSubmit(e)} ><div className="flex flex-col justify-center items-center h-screen">
-        <div className="md:flex box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200	-500 m4 rounded">
+        return(<form onSubmit={(e)=>this.onSubmit(e)} ><div className="flex flex-col justify-center items-center h-full xl:h-screen md:h-screen lg:h-screen sm:h-screen">
+        <div className="md:flex box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200	-500 m4 rounded"> 
             <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
             <div className="flex flex-col md:flex-col">
                   <NavBar/>

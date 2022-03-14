@@ -5,6 +5,7 @@ import axios from "axios"
 import jwt from "jwt-decode";
 import {Navigate} from "react-router-dom"
 import login_img from "../../images/login_faces.jpg";
+import { configuration } from "../../configuration";
 type UserData = {
     username:string,
     password:string,
@@ -24,7 +25,7 @@ export default class LoginPage extends React.Component<{},UserData>{
     }
 
     async tryToLogin(){
-      await axios.post("http://localhost:8080/auth/login",{username:this.state.username,password:this.state.password},
+      await axios.post(configuration.API_URL + "/auth/login",{username:this.state.username,password:this.state.password},
        {
         headers: {
           'Content-Type': 'application/json'

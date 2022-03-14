@@ -4,6 +4,7 @@ import icon from "../../images/recognition_2_face.png"
 import "flowbite"
 import { NavLink,HistoryRouterProps, Outlet, Navigate } from "react-router-dom";
 import axios from "axios";
+import { configuration } from "../../configuration";
 
 type Props ={
   showNav:boolean,
@@ -23,7 +24,7 @@ export default class NavBar extends React.Component<{},Props>{
   }
 
   async logout(){
-    await axios.post("http://localhost:8080/auth/logout",{},{headers: {
+    await axios.post(configuration.API_URL + "/auth/logout",{},{headers: {
       'Content-Type': 'application/json'
     },
     withCredentials: true

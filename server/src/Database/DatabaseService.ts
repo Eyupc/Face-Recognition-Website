@@ -18,7 +18,7 @@ export default class DatabaseService {
         this._client.connect()
     }
 
-    private async query(query:queryParams):Promise<string>{
+    public async query(query:queryParams):Promise<string>{
     let q = await this._database.collection(query.collection).find(query.params).toArray();
     let result = String(JSON.stringify(q));
     if(q.length > 0)
@@ -28,11 +28,11 @@ export default class DatabaseService {
     }
 
     public async tryToLogin(username:string,password:string):Promise<string>{
-        let checkUsername = await this.query({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
+        let checkUsername = await this.query({collection:"staffs",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
         if(JSON.parse(checkUsername).status === 0){
             return JSON.stringify({status:"failed",reason:"This username doesn't exist!"})
         }
-        let checkCredentials = await this.query({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")},password:password}})
+        let checkCredentials = await this.query({collection:"staffs",params:{username:{$regex:new RegExp(username,"i")},password:password}})
         if(JSON.parse(checkCredentials).status === 0){
             return JSON.stringify({status:"failed",reason:"Incorrect password"})
         }
