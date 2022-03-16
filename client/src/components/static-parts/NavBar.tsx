@@ -39,7 +39,7 @@ export default class NavBar extends React.Component<{},Props>{
         return(<nav className="bg-blue-200 border-gray-200 px-2 rounded p-2">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <a href="#" className="flex">
-            <img src={icon}/>
+            <img draggable={false} src={icon}/>
               <span className="self-center text-lg font-semibold whitespace-nowrap">Face Recognition</span>
           </a>
           <button onClick={this.toggleNav} type="button" className="md:hidden ml-3 text-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-lg inline-flex items-center justify-center" aria-controls="mobile-menu-2" aria-expanded="false">

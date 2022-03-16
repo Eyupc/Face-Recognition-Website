@@ -1,6 +1,6 @@
 import mongo, { MongoClient } from "mongodb"
 import { User } from "../User/User";
-
+import bcrypt from "bcrypt";
 type queryParams = {
     collection:string,
     params:{}
@@ -28,14 +28,22 @@ export default class DatabaseService {
     }
 
     public async tryToLogin(username:string,password:string):Promise<string>{
-        let checkUsername = await this.query({collection:"staffs",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
-        if(JSON.parse(checkUsername).status === 0){
+        let data = await this.query({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
+        if(JSON.parse(data).status === 0){
             return JSON.stringify({status:"failed",reason:"This username doesn't exist!"})
         }
-        let checkCredentials = await this.query({collection:"staffs",params:{username:{$regex:new RegExp(username,"i")},password:password}})
-        if(JSON.parse(checkCredentials).status === 0){
-            return JSON.stringify({status:"failed",reason:"Incorrect password"})
-        }
-        return JSON.stringify({status:"success",data:new User(Number(JSON.parse(checkCredentials)[0].id),JSON.parse(checkCredentials)[0].username)})
+        
+        var checkPass = await new Promise(function(resolve, reject) {
+        bcrypt.compare(password, JSON.parse(data)[0].password, (err, res) => {
+            if (err) {
+                reject(err);
+           } else {
+                resolve(res);
+           }
+        });
+    });
+
+        return (checkPass ? JSON.stringify({status:"success",data:new User(Number(JSON.parse(data)[0].id),JSON.parse(data)[0].username)}):
+        JSON.stringify({status:"failed",reason:"Incorrect password"}));
     }
 }

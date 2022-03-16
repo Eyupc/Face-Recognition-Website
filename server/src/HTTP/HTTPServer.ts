@@ -9,7 +9,6 @@ import jsonToken, { JsonWebTokenError } from "jsonwebtoken"
 import jwt_decode from "jwt-decode";
 import RedisClient from '../Redis/RedisClient';
 
-
 interface ZMember {
     score: number;
     value: string;
@@ -93,7 +92,6 @@ export class HTTPServer{
       return;
       }
       res.send(await Main.databaseService.query({collection:"users_whitelisted",params:{}}))
-      console.log("ok")
     })
 
 }
@@ -110,7 +108,7 @@ export class HTTPServer{
     }
    // console.log(tokens)
 
-    if(res){
+    if(req.cookies.FC_SESSION){
     jsonToken.verify(req.cookies.FC_SESSION,this.secret,(err:any,user:any)=>{
     if(err){
         returnVal =  (send ? res.send(JSON.stringify({status:"failed",reason:"Invalid token"})) : JSON.stringify({status:"failed",reason:"Invalid token"})); 
