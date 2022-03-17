@@ -109,6 +109,17 @@ export class HTTPServer{
 
     })
 
+    this._express.get("/admin/home",async(req,res,next)=>{
+        let auth = await this.checkAuth(req, res, next, false);
+        if(JSON.parse(auth).status =="failed"){
+        res.send(auth);
+        return;
+         }
+    
+         let data = await Main.databaseService.queryFind({collection:"config",params:{}})
+         return res.send(data);
+    })
+
 }
     async checkAuth(req:express.Request,res:express.Response,next:express.NextFunction,send:boolean):Promise<any>{
         let returnVal = null;
