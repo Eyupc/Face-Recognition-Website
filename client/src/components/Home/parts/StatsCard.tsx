@@ -1,8 +1,31 @@
+import axios from "axios";
 import React from "react";
+import { configuration } from "../../../configuration";
 
 export class StatsCard extends React.Component{
+    private start_time:number = 0;
+    
+    state = {
+        runtime:0
+    }
     constructor(props={}){
         super(props)
+        this.getData()
+        setInterval(()=>{
+            this.setState({runtime:Math.round((Number(Math.round(Date.now() / 1000)) - Number(Math.round(this.start_time)))/60)})
+        },1000)
+    }
+
+    async getData(){
+        await axios.get(configuration.API_URL + "/admin/home",{
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          }).then((resp)=>{
+            this.start_time = resp.data[0].start_time;
+            this.setState({runtime:Math.round((Number(Math.round(Date.now() / 1000)) - Number(Math.round(this.start_time)))/60)})                      
+        })
     }
 
 
@@ -20,7 +43,7 @@ export class StatsCard extends React.Component{
                         </div>
                         <div>
                             <div className="text-gray-400">Runtime</div>
-                            <div className="text-2xl font-bold text-gray-900">%time%</div>
+                            <div className="text-2xl font-bold text-gray-900">{this.state.runtime}min.</div>
                         </div>
                     </div>
                 </div>
