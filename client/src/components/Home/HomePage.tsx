@@ -1,4 +1,6 @@
+import axios from "axios";
 import React from "react";
+import { configuration } from "../../configuration";
 import "../../css/index.css"
 import { AuthManager } from "../../routes/auth/AuthManager";
 import LoginPage from "../Login/LoginPage";
@@ -11,9 +13,11 @@ export default class HomePage extends React.Component{
         loggedIn:true,
         isLoading:true,
     }
+
      constructor(props ={}){
         super(props);
-    }
+     }
+
 
 
     render(){
