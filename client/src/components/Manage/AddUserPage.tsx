@@ -15,10 +15,10 @@ export class AddUserPage extends React.Component<{},State> {
   private WSClient:WSClient;
   private ws:WebSocket;
 
-
   constructor(props={}){
         super(props)
-        this.WSClient = new WSClient("192.168.0.155",7777,false,"AddUserPage");
+        this.WSClient = WSClient.getInstance()
+        this.WSClient.setPage = "AddUserPage";
         this.ws = this.WSClient.websocket;
         this.ws.onmessage = (msg) => this.onMessage(msg)
         this.state = {

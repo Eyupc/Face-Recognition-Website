@@ -86,7 +86,7 @@ export class HTTPServer{
     })
 
     this._express.get("/admin/deleteUsers",async(req,res,next)=>{
-        let auth = await this.checkAuth(req, res, next, false);
+    let auth = await this.checkAuth(req, res, next, false);
       if(JSON.parse(auth).status =="failed"){
       res.send(auth);
       return;
@@ -95,6 +95,11 @@ export class HTTPServer{
     })
 
     this._express.get("/admin/deleteUsers/cmd_delete",async(req,res,next)=>{
+        let auth = await this.checkAuth(req, res, next, false);
+        if(JSON.parse(auth).status =="failed"){
+        res.send(auth);
+        return;
+         }
         let del = await Main.databaseService.queryDelete({collection:"users_whitelisted",params:{id:Number(req.query.id)}});
         if(del.status == 1){
             res.send({status:"OK"})

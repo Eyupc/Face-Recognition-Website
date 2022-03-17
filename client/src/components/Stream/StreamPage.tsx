@@ -11,21 +11,18 @@ export class StreamPage extends React.Component<{},MessageState> {
 private WSClient:WSClient;
 private ws:WebSocket;
 
-private id:string | undefined;
-private PingEvent:any | undefined;
 
 constructor(props = {}){
     super(props);
-    this.WSClient = new WSClient("localhost",7777,false,"StreamPage");
+    this.WSClient = WSClient.getInstance();
+    this.WSClient.setPage = "StreamPage"
     this.ws= this.WSClient.websocket; 
 
     this.ws.onmessage = (msg) => this.onMessage(msg);
     this.state = {
         "image":""
-    }
-    
+    }   
 }
-
 
 onMessage(msg:any){
     let incoming = JSON.parse(this.WSClient.decoder.decode(msg.data));
@@ -35,8 +32,6 @@ onMessage(msg:any){
    });
     }
 }
-
-
 
 
 render() {

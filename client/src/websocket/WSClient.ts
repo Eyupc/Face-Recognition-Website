@@ -7,6 +7,8 @@ private _decoder:TextDecoder = new TextDecoder();
 private _page:string;
 private PingEvent:any | undefined;
 private _userid = "";
+
+public static ws:WSClient | undefined;
 constructor(host:string,port:number,secure:boolean,page:string)
 {
     this.ws = (secure ? new WebSocket("wss://"+host+":"+port.toString()) : new WebSocket("ws://"+host+":"+port.toString()));
@@ -15,6 +17,8 @@ constructor(host:string,port:number,secure:boolean,page:string)
     this.ws.onclose = () => this.onClose();
     this.ws.onopen = () => this.onOpen();
     this.ws.binaryType = "arraybuffer";
+    
+    WSClient.ws = this;
 }
 
 onError(err:any){
@@ -65,4 +69,15 @@ get decoder(){
 get userId(){
     return this._userid;
 }
+set setPage(page:string){
+    this._page = page;
+}
+
+public static getInstance(){
+if(WSClient.ws === undefined){
+    WSClient.ws = new WSClient("localhost",7777,false,"HomePage");
+}
+return WSClient.ws;
+}
+
 }

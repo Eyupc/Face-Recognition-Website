@@ -5,12 +5,16 @@ import LoadingPage from "../Loading/LoadingPage";
 import NavBar from "../static-parts/NavBar";
 import delete_icon from "../../images/delete_icon.png";
 import Pagination from '@mui/material/Pagination';
+import { WSClient } from "../../websocket/WSClient";
 
 export default class DeleteUserPage extends React.Component {
-    private data:any;
     private users:any = [];
-    private maxPages:number = 1;
-    private showCount:number = 0;
+    private maxPages:number = 1; // maximum paginas
+    private showCount:number = 0; //hoeveel rijen er zijn = 4 p/pagina
+
+    private WSClient:WSClient;
+    private ws:WebSocket;
+    
     state = {
         isLoading:true,
         currentPage:1,
@@ -21,15 +25,35 @@ export default class DeleteUserPage extends React.Component {
 
     constructor(props={}){
         super(props);
+        this.WSClient = WSClient.getInstance()
+        this.WSClient.setPage= "DeleteUserPage";
+        this.ws = this.WSClient.websocket;
+        this.ws.onmessage = (msg) => this.onMessage(msg)
+
         this.getData();
     }
+
+    onMessage(msg:any){
+        let data = JSON.parse(this.WSClient.decoder.decode(msg.data));
+        if(data.status == "True"){
+            console.log("deleted");
+        }else {
+            console.log(data)
+        }
+    }
+    async SendData(json:string){
+        if(this.ws.OPEN === this.ws.readyState)
+         this.ws.send((this.WSClient.encoder.encode(json)));
+        else
+        console.log("ERROR: Websocket connection is closed")
+      }
+
     async getData(){
         await axios.get(configuration.API_URL + "/admin/deleteUsers",{headers: {
             'Content-Type': 'application/json'
           },
           withCredentials: true}).then(async(resp)=>{
-            this.data  = resp.data;
-            this.users = this.data;
+            this.users = resp.data;
             this.maxPages = (this.users.length === undefined ? 1 : Math.ceil(this.users.length / 4)); //afronden nr de volgende grootste int
             await this.getRows(this.state.currentPage);
         }).catch((err)=>{
@@ -99,6 +123,14 @@ export default class DeleteUserPage extends React.Component {
                   }
                   await this.getData();
                   await this.getRows(this.state.currentPage);
+                  let json = {
+                    header:"DeleteUserEvent",
+                    data:[{
+                      "websocket_id":this.WSClient.userId,
+                      "user_id":id
+                    }]
+                  }
+                  await this.SendData(JSON.stringify(json));
               }
           })
 
