@@ -37,7 +37,7 @@ export default class DatabaseService {
     }
 
     public async tryToLogin(username:string,password:string):Promise<string>{
-        let data = await this.queryFind({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
+        let data = await this.queryFind({collection:"staffs",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
         if(JSON.parse(data).status === 0){
             return JSON.stringify({status:"failed",reason:"This username doesn't exist!"})
         }
