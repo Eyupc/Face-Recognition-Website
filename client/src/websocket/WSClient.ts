@@ -71,6 +71,18 @@ get userId(){
 }
 set setPage(page:string){
     this._page = page;
+    
+    
+    let json = {
+        header:"SetPageEvent",
+        data:[{
+          "id":this._userid,
+          "page":page
+        }]
+      }
+      if(this.ws.OPEN === this.ws.readyState){
+    this.ws.send(this.encoder.encode(JSON.stringify(json)));
+}
 }
 
 public static getInstance(){
