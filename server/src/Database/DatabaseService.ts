@@ -18,7 +18,7 @@ export default class DatabaseService {
         this._client.connect()
     }
 
-    public async query(query:queryParams):Promise<string>{
+    public async queryFind(query:queryParams):Promise<string>{
     let q = await this._database.collection(query.collection).find(query.params).toArray();
     let result = String(JSON.stringify(q));
     if(q.length > 0)
@@ -27,8 +27,17 @@ export default class DatabaseService {
         return JSON.stringify({status:0})
     }
 
+    public async queryDelete(query:queryParams){
+    let result = {status:0}
+    let del = this._database.collection(query.collection).deleteOne(query.params);
+    if((await del).deletedCount > 0)
+        return {status:1};
+    else
+    return {status:0}
+    }
+
     public async tryToLogin(username:string,password:string):Promise<string>{
-        let data = await this.query({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
+        let data = await this.queryFind({collection:"users_admin",params:{username:{$regex:new RegExp(username,"i")}}}) //Case in-sensitive
         if(JSON.parse(data).status === 0){
             return JSON.stringify({status:"failed",reason:"This username doesn't exist!"})
         }

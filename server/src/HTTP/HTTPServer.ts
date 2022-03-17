@@ -91,7 +91,17 @@ export class HTTPServer{
       res.send(auth);
       return;
       }
-      res.send(await Main.databaseService.query({collection:"users_whitelisted",params:{}}))
+      res.send(await Main.databaseService.queryFind({collection:"users_whitelisted",params:{}}))
+    })
+
+    this._express.get("/admin/deleteUsers/cmd_delete",async(req,res,next)=>{
+        let del = await Main.databaseService.queryDelete({collection:"users_whitelisted",params:{id:Number(req.query.id)}});
+        if(del.status == 1){
+            res.send({status:"OK"})
+        }else{
+            res.send({status:"FAILED"})
+        }
+
     })
 
 }
@@ -99,7 +109,6 @@ export class HTTPServer{
         let returnVal = null;
         if(!req.cookies.FC_SESSION){
         returnVal =  (send ? res.send(JSON.stringify({status:"failed"})) : JSON.stringify({status:"failed"}));
-        
         }
     var tokens = await this.RedisClient.getClient().hKeys("tokens");
     if(tokens.includes(req.cookies.FC_SESSION)){

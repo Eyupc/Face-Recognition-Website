@@ -9,8 +9,8 @@ import Pagination from '@mui/material/Pagination';
 export default class DeleteUserPage extends React.Component {
     private data:any;
     private users:any = [];
-    private pagination:any = [];
     private maxPages:number = 1;
+    private showCount:number = 0;
     state = {
         isLoading:true,
         currentPage:1,
@@ -30,9 +30,8 @@ export default class DeleteUserPage extends React.Component {
           withCredentials: true}).then(async(resp)=>{
             this.data  = resp.data;
             this.users = this.data;
-            this.maxPages = Math.ceil(this.users.length / 4) + 1; //afronden nr de volgende grootste int
-            //console.log(this.maxPages)
-            await this.getRows(1);
+            this.maxPages = (this.users.length === undefined ? 1 : Math.ceil(this.users.length / 4)); //afronden nr de volgende grootste int
+            await this.getRows(this.state.currentPage);
         }).catch((err)=>{
         })
         this.setState({isLoading:false});
@@ -40,12 +39,15 @@ export default class DeleteUserPage extends React.Component {
 
     async getRows(page:number){
         //TODO
-        this.setState({items:[]});
+        this.setState({items:[]})
         let start = ((page == 1) ? 0 : (page-1)*4);
+        this.showCount = 0;
         for(let i = start; i<= this.users.length-1;i++){
-            let info  = this.users[i];
-            //console.log(info)
-            this.setState({items:[...this.state.items,(<tr key={i}>
+            this.showCount++;
+            if(this.showCount > 4)
+                break;
+            let info  = this.users[i];            
+            this.setState((prevState:any) => ({items:[...prevState.items,(<tr key={i}>
                 <td className="p-2 whitespace-nowrap">
                         <div className="text-left">{info.id}</div>
                     </td>
@@ -63,11 +65,13 @@ export default class DeleteUserPage extends React.Component {
                         <div className="text-lg text-center">{JSON.parse(info.train_data).length}</div>
                     </td>
                     <td className="p-2 whitespace-nowrap">
-                    <button className=" hover:bg-gray-200 text-gray-800 font-bold py-2 px-1 rounded inline-flex items-center" id={"btn-del-"+info.id}>
+                    <button onClick={()=>this.delete(info.id)} className=" hover:bg-gray-200 text-gray-800 font-bold py-2 px-1 rounded inline-flex items-center" id={"btn-del-"+info.id}>
                     <img draggable={false} src={delete_icon}/>
                     </button>
                     </td>
-                </tr>)]});
+                </tr>)]}));
+
+
         }
     }
      private handleChange = async(event: React.ChangeEvent<unknown>, value: number)=>{
@@ -75,8 +79,32 @@ export default class DeleteUserPage extends React.Component {
         await this.getRows(value);
       };
 
+    async delete(id:number){
+        
+        await axios.get(configuration.API_URL + "/admin/deleteUsers/cmd_delete", {
+            params:{
+                id:id
+            },
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          }).then(async(resp)=>{
+             // console.log(resp.data.status)
+              if(resp.data.status == "OK"){
+                  if(this.showCount == 1){
+                      if(this.state.currentPage != 1){
+                          this.setState({currentPage:(this.state.currentPage-1)})
+                      }
+                  }
+                  await this.getData();
+                  await this.getRows(this.state.currentPage);
+              }
+          })
 
+    }
 
+//TODO WEBSOCKETS
     render(){
         if(this.state.isLoading)
         return(<LoadingPage/>)
@@ -117,7 +145,7 @@ export default class DeleteUserPage extends React.Component {
                 <div className="mb-4 p-2 inline-flex justify-center">
                 <ul className="inline-flex justify-center items-center -space-x-px">
             <Pagination page={this.state.currentPage} onChange={this.handleChange} count={this.maxPages}/>
-  </ul>
+            </ul>
             </div></div>
         </div></div></div>)
     }
