@@ -11,6 +11,7 @@ export class StreamPage extends React.Component<{},MessageState> {
 private WSClient:WSClient;
 private ws:WebSocket;
 
+private loading = true;
 
 constructor(props = {}){
     super(props);
@@ -24,13 +25,22 @@ constructor(props = {}){
     }   
 }
 
+componentDidMount(){
+this.loading= false;
+}
+componentWillUnmount(){
+  this.loading = true;
+}
+
 onMessage(msg:any){
+  if(!this.loading){
     let incoming = JSON.parse(this.WSClient.decoder.decode(msg.data));
     if(incoming.header == "StreamEvent"){
     this.setState(()=>{
         return{image:'data:image/jpg;base64,'+incoming.data[0].message}
    });
     }
+  }
 }
 
 
