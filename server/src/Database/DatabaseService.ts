@@ -1,4 +1,4 @@
-import mongo, { MongoClient } from "mongodb";
+import mongo, { Collection, InsertOneResult, MongoClient } from "mongodb";
 import { User } from "../User/User";
 import bcrypt from "bcrypt";
 type queryParams = {
@@ -28,14 +28,14 @@ export default class DatabaseService {
     else return JSON.stringify({ status: "failed" });
   }
 
-  public async lastDocument(query:queryParams){
+  public async lastDocument(query:queryParams):Promise<mongo.WithId<mongo.Document>[]>{
     let lastrecord = this._database
       .collection("staffs")
       .find({}).sort("_id",-1).limit(1).toArray()
     return lastrecord
   }
 
-  public async queryDelete(query: queryParams) {
+  public async queryDelete(query: queryParams):Promise<{status:string}> {
     let result = { status: "failed" };
     let del = this._database
       .collection(query.collection)
@@ -44,8 +44,11 @@ export default class DatabaseService {
     else return { status: "failed" };
   }
 
-  public async queryInsert(query:queryParams){
+  public async queryInsert(query:queryParams):Promise<InsertOneResult<Document>>{
     return await this._database.collection(query.collection).insertOne(query.params);
+  }
+  public async countDocuments(query:queryParams):Promise<number>{
+    return await this._database.collection(query.collection).countDocuments()
   }
 
   public async tryToLogin(username: string, password: string): Promise<string> {
