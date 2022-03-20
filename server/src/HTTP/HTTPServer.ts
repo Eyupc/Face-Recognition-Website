@@ -142,11 +142,20 @@ export class HTTPServer {
         return;
       }
 
-      let data = await Main.databaseService.queryFind({
+      let start_time = await Main.databaseService.queryFind({
         collection: "config",
         params: {},
       });
-      return res.send(data);
+       
+      if(JSON.parse(start_time).status == "failed"){
+        start_time = "0";
+      }else {
+        start_time = JSON.parse(start_time)[0].start_time
+      }
+      let countStaff = await Main.databaseService.countDocuments({collection:"staffs",params:{}})
+      let countUser = await Main.databaseService.countDocuments({collection:"users_whitelisted",params:{}})
+
+      return res.send({start_time:start_time,countUser:countUser,countStaff:countStaff});
     });
 
     this._express.get("/admin/addAdmin", async (req, res, next) => {
