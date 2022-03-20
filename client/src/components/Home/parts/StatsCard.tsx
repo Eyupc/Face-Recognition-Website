@@ -6,16 +6,19 @@ import { configuration } from "../../../configuration";
 export class StatsCard extends React.Component {
   private start_time: number = 0;
   private timer: any;
+  private Date = new Date();
+
   state = {
     runtime: 0,
+    countUser:0,
+    countStaff:0
   };
   constructor(props = {}) {
     super(props);
   }
   componentDidMount(){
     this.getData();
-
-    this.timer = setInterval(() => {
+    this.timer = setInterval(() => { // renders again => clock will work
       this.setState({
         runtime: Math.round(
           (Number(Math.round(Date.now() / 1000)) -
@@ -39,14 +42,17 @@ export class StatsCard extends React.Component {
         withCredentials: true,
       })
       .then(async(resp) => {
-        if(resp.data[0] != undefined){
-        this.start_time = await resp.data[0].start_time;
+       // console.log(resp.data)
+        if(resp.data != undefined){
+        this.start_time = await resp.data.start_time;
         this.setState({
           runtime: Math.round(
             (Number(Math.round(Date.now() / 1000)) -
               Number(Math.round(this.start_time))) /
               60
           ),
+          countUser:resp.data.countUser,
+          countStaff:resp.data.countStaff
         });
       }
     });
@@ -115,7 +121,7 @@ export class StatsCard extends React.Component {
               </div>
               <div>
                 <div className="text-gray-400">Users</div>
-                <div className="text-2xl font-bold text-gray-900">%users%</div>
+                <div className="text-2xl font-bold text-gray-900">{this.state.countUser}</div>
               </div>
             </div>
           </div>
@@ -149,7 +155,7 @@ export class StatsCard extends React.Component {
               </div>
               <div>
                 <div className="text-gray-400">Staffs</div>
-                <div className="text-2xl font-bold text-gray-900">%staffs%</div>
+                <div className="text-2xl font-bold text-gray-900">{this.state.countStaff}</div>
               </div>
             </div>
           </div>
@@ -157,26 +163,12 @@ export class StatsCard extends React.Component {
             <div className="flex items-center space-x-4">
               <div>
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-400">
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 25.3333V17.3333C12 16.6261 11.719 15.9478 11.219 15.4477C10.7189 14.9476 10.0406 14.6667 9.33333 14.6667H6.66667C5.95942 14.6667 5.28115 14.9476 4.78105 15.4477C4.28095 15.9478 4 16.6261 4 17.3333V25.3333C4 26.0406 4.28095 26.7189 4.78105 27.219C5.28115 27.719 5.95942 28 6.66667 28H9.33333C10.0406 28 10.7189 27.719 11.219 27.219C11.719 26.7189 12 26.0406 12 25.3333ZM12 25.3333V12C12 11.2928 12.281 10.6145 12.781 10.1144C13.2811 9.61428 13.9594 9.33333 14.6667 9.33333H17.3333C18.0406 9.33333 18.7189 9.61428 19.219 10.1144C19.719 10.6145 20 11.2928 20 12V25.3333M12 25.3333C12 26.0406 12.281 26.7189 12.781 27.219C13.2811 27.719 13.9594 28 14.6667 28H17.3333C18.0406 28 18.7189 27.719 19.219 27.219C19.719 26.7189 20 26.0406 20 25.3333M20 25.3333V6.66667C20 5.95942 20.281 5.28115 20.781 4.78105C21.2811 4.28095 21.9594 4 22.6667 4H25.3333C26.0406 4 26.7189 4.28095 27.219 4.78105C27.719 5.28115 28 5.95942 28 6.66667V25.3333C28 26.0406 27.719 26.7189 27.219 27.219C26.7189 27.719 26.0406 28 25.3333 28H22.6667C21.9594 28 21.2811 27.719 20.781 27.219C20.281 26.7189 20 26.0406 20 25.3333Z"
-                      stroke="currentColor "
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 12v-6h-2v8h7v-2h-5z"/></svg>
                 </div>
               </div>
               <div>
-                <div className="text-gray-400">Staffs Online</div>
-                <div className="text-2xl font-bold text-gray-900">%online%</div>
+                <div className="text-gray-400">Clock</div>
+                <div className="text-2xl font-bold text-gray-900">{((new Date().getHours().toString().length > 1) ? new Date().getHours() : "0"+new Date().getHours()) + ":" + ((new Date().getMinutes().toString().length > 1) ? new Date().getMinutes() : "0"+new Date().getMinutes()) + ":"+ ((new Date().getSeconds().toString().length > 1) ? new Date().getSeconds() : "0"+new Date().getSeconds())}</div>
               </div>
             </div>
           </div>
