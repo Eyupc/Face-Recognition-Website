@@ -21,6 +21,14 @@ export class WSClient {
 
     WSClient.ws = this;
   }
+  
+  public static getInstance() {
+    if (WSClient.ws === undefined) {
+      WSClient.ws = new WSClient("192.168.0.180", 7777, false, "HomePage");
+    }
+    return WSClient.ws;
+  }
+
 
   onError(err: any) {
     console.log(err);
@@ -90,10 +98,4 @@ export class WSClient {
     }
   }
 
-  public static getInstance() {
-    if (WSClient.ws === undefined) {
-      WSClient.ws = new WSClient("localhost", 7777, false, "HomePage");
-    }
-    return WSClient.ws;
-  }
 }
