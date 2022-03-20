@@ -6,16 +6,12 @@ import jwt from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import login_img from "../../images/login_faces.jpg";
 import { configuration } from "../../configuration";
-import 'react-notifications/lib/notifications.css';
+import cogoToast from 'cogo-toast';
 
 type UserData = {
   username: string;
   password: string;
   redirect: boolean;
-  notification:{
-      success:boolean|null,
-      text:string|null,
-  }
 };
 
 export default class LoginPage extends React.Component<{}, UserData> {
@@ -25,9 +21,7 @@ export default class LoginPage extends React.Component<{}, UserData> {
       username: "",
       password: "",
       redirect: false,   
-      notification:{success:null,
-                    text:null}  
-    };
+    }
   }
 
   async tryToLogin() {
@@ -43,15 +37,16 @@ export default class LoginPage extends React.Component<{}, UserData> {
         }
       )
       .then((resp) => {
-       console.log(resp.data);
         if (resp.data.status === "OK") {
           const decoded = jwt(resp.data.token);
-          this.setState({ redirect: true,notification:{success:true,text:"Logged in"}});
+          cogoToast.success("You are successfully logged in!",{position:"top-right"})
+          this.setState({ redirect: true});
+        }else{
+        cogoToast.error(resp.data.reason,{position:"top-right"})
         }
-        this.setState({ redirect: true,notification:{success:false,text:resp.data.reason}});
     })
       .catch((err) => {
-        console.log("Back-end offline! :(");
+        cogoToast.error("Back-end is offline :(",{position:"top-left"})
       });
   }
 
