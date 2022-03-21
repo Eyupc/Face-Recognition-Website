@@ -24,7 +24,7 @@ export class WSClient {
   
   public static getInstance() {
     if (WSClient.ws === undefined) {
-      WSClient.ws = new WSClient("192.168.0.180", 7777, false, "HomePage");
+      WSClient.ws = new WSClient("localhost", 7777, false, "HomePage");
     }
     return WSClient.ws;
   }

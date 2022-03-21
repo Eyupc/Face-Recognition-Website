@@ -6,7 +6,7 @@ import { configuration } from "../../../configuration";
 export class StatsCard extends React.Component {
   private start_time: number = 0;
   private timer: any;
-  private Date = new Date();
+  private loading = true;
 
   state = {
     runtime: 0,
@@ -17,6 +17,7 @@ export class StatsCard extends React.Component {
     super(props);
   }
   componentDidMount(){
+    this.loading = false
     this.getData();
     this.timer = setInterval(() => { // renders again => clock will work
       this.setState({
@@ -30,6 +31,7 @@ export class StatsCard extends React.Component {
   }
 
   componentWillUnmount() {
+    this.loading = true;
     clearTimeout(this.timer);
   }
 
@@ -43,7 +45,7 @@ export class StatsCard extends React.Component {
       })
       .then(async(resp) => {
        // console.log(resp.data)
-        if(resp.data != undefined){
+        if(!this.loading){
         this.start_time = await resp.data.start_time;
         this.setState({
           runtime: Math.round(

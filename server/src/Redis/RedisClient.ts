@@ -1,15 +1,15 @@
 import {createClient} from "redis"
 export default class RedisClient {
-    private _redis = createClient({url:'redis://0.0.0.0:6379/0'});
+    private static _redis = createClient({url:'redis://0.0.0.0:6379/0'});
     
     constructor(){
-        this.connect();
+     //  this.connect();
     }
 
-    private async connect(){
-        await this._redis.connect();
+    public static  async connect(){
+        await RedisClient._redis.connect();
     }
-    public  getClient(){
+    public static getClient(){
         return this._redis;
     }
     
