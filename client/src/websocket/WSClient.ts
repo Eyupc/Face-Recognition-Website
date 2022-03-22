@@ -13,11 +13,11 @@ export class WSClient {
     this.ws = secure
       ? new WebSocket("wss://" + host + ":" + port.toString())
       : new WebSocket("ws://" + host + ":" + port.toString());
+    this.ws.binaryType = "arraybuffer";
     this._page = page;
     this.ws.onerror = (err) => this.onError(err);
     this.ws.onclose = () => this.onClose();
     this.ws.onopen = () => this.onOpen();
-    this.ws.binaryType = "arraybuffer";
 
     WSClient.ws = this;
   }
