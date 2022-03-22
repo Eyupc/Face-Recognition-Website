@@ -10,6 +10,9 @@ export class ErrorPage extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    document.title = "Face Recognition - Error"
+  }
   render() {
     if (this.state.goBack) return <Navigate to="/" replace />;
 

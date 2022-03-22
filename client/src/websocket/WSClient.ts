@@ -21,14 +21,13 @@ export class WSClient {
 
     WSClient.ws = this;
   }
-  
+
   public static getInstance() {
     if (WSClient.ws === undefined) {
       WSClient.ws = new WSClient("localhost", 7777, false, "HomePage");
     }
     return WSClient.ws;
   }
-
 
   onError(err: any) {
     console.log(err);
@@ -97,5 +96,4 @@ export class WSClient {
       this.ws.send(this.encoder.encode(JSON.stringify(json)));
     }
   }
-
 }

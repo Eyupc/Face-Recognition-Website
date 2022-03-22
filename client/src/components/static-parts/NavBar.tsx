@@ -30,7 +30,7 @@ export default class NavBar extends React.Component<{}, Props> {
     });
   }
 
-  async logout(){
+  async logout() {
     await axios.post(
       configuration.API_URL + "/auth/logout",
       {},
@@ -41,12 +41,12 @@ export default class NavBar extends React.Component<{}, Props> {
         withCredentials: true,
       }
     );
-    this.setState({ logout: true })
-}
+    this.setState({ logout: true });
+  }
 
   render() {
     if (this.state.logout) {
-    return <Navigate to="/"/>
+      return <Navigate to="/" />;
     }
     return (
       <nav className="bg-blue-200 border-gray-200 px-2 rounded p-2">
@@ -153,25 +153,28 @@ export default class NavBar extends React.Component<{}, Props> {
                   Delete user
                 </NavLink>
               </li>
-              {(AuthManager.rank > 1) ? // check if rank is greater than 1
-              <li>
-                <NavLink
-                  className={({ isActive }) =>
-                    (isActive
-                      ? "md:text-blue-700 bg-blue-700"
-                      : "md:hover:text-cyan-700 0 bg-[#adc9eb]") +
-                    " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"
-                  }
-                  to="/manage/addAdmin"
-                  end
-                >
-                  Add admin
-                </NavLink>
-              </li> : <></>}
+              {AuthManager.rank > 1 ? ( // check if rank is greater than 1
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      (isActive
+                        ? "md:text-blue-700 bg-blue-700"
+                        : "md:hover:text-cyan-700 0 bg-[#adc9eb]") +
+                      " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"
+                    }
+                    to="/manage/addAdmin"
+                    end
+                  >
+                    Add admin
+                  </NavLink>
+                </li>
+              ) : (
+                <></>
+              )}
 
               <li>
                 <NavLink
-                  onClick={()=>this.logout()}
+                  onClick={() => this.logout()}
                   className={
                     "md:text-orange-800 bg-[#adc9eb] md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"
                   }

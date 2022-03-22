@@ -7,8 +7,8 @@ import LoadingPage from "../components/Loading/LoadingPage";
 import { cp } from "fs/promises";
 
 type ProtectedRouteType = {
-  auth: true | false,
-  rank?: number,
+  auth: true | false;
+  rank?: number;
 };
 
 const ProtectedRoutes = (props: ProtectedRouteType) => {
@@ -17,7 +17,7 @@ const ProtectedRoutes = (props: ProtectedRouteType) => {
   let _data: any;
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser]:any = useState(null);
+  const [user, setUser]: any = useState(null);
   const { pathname } = useLocation();
   useEffect(() => {
     async function check() {
@@ -34,25 +34,24 @@ const ProtectedRoutes = (props: ProtectedRouteType) => {
     check();
   }, [pathname]);
 
-  if (loading) return <LoadingPage />; //TODO
+  if (loading) return <LoadingPage />;
 
-  if(props.auth){
-    if(user){
-      if(props.rank! <= user.data._rank){
-        return <Outlet/>
-      }else {
-        return <Navigate to="/home"/>
+  if (props.auth) {
+    if (user) {
+      if (props.rank! <= user.data._rank) {
+        return <Outlet />;
+      } else {
+        return <Navigate to="/home" />;
       }
-    }else {
-      return <Navigate to="/"/>
+    } else {
+      return <Navigate to="/" />;
     }
-  
-    }else {
-      if(user){
-        return <Navigate to="/home"/>
-      }else {
-        return <Outlet/>
-      }
+  } else {
+    if (user) {
+      return <Navigate to="/home" />;
+    } else {
+      return <Outlet />;
     }
   }
+};
 export default ProtectedRoutes;

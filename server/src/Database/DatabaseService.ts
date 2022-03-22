@@ -28,15 +28,19 @@ export default class DatabaseService {
     else return JSON.stringify({ status: "failed" });
   }
 
-  public async lastDocument(query:queryParams):Promise<mongo.WithId<mongo.Document>[]>{
+  public async lastDocument(
+    query: queryParams
+  ): Promise<mongo.WithId<mongo.Document>[]> {
     let lastrecord = this._database
-      .collection("staffs")
-      .find({}).sort("_id",-1).limit(1).toArray()
-    return lastrecord
+      .collection(query.collection)
+      .find({})
+      .sort("_id", -1)
+      .limit(1)
+      .toArray();
+    return lastrecord;
   }
 
-  public async queryDelete(query: queryParams):Promise<{status:string}> {
-    let result = { status: "failed" };
+  public async queryDelete(query: queryParams): Promise<{ status: string }> {
     let del = this._database
       .collection(query.collection)
       .deleteOne(query.params);
@@ -44,44 +48,14 @@ export default class DatabaseService {
     else return { status: "failed" };
   }
 
-  public async queryInsert(query:queryParams):Promise<InsertOneResult<Document>>{
-    return await this._database.collection(query.collection).insertOne(query.params);
+  public async queryInsert(
+    query: queryParams
+  ): Promise<InsertOneResult<Document>> {
+    return await this._database
+      .collection(query.collection)
+      .insertOne(query.params);
   }
-  public async countDocuments(query:queryParams):Promise<number>{
-    return await this._database.collection(query.collection).countDocuments()
-  }
-
-  public async tryToLogin(username: string, password: string): Promise<string> {
-    let data = await this.queryFind({
-      collection: "staffs",
-      params: { username: { $regex: new RegExp(username, "i") } },
-    }); //Case in-sensitive
-    if (JSON.parse(data).status === "failed") {
-      return JSON.stringify({
-        status: "failed",
-        reason: "This username doesn't exist!",
-      });
-    }
-
-    var checkPass = await new Promise(function (resolve, reject) {
-      bcrypt.compare(password, JSON.parse(data)[0].password, (err, res) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-
-    return checkPass
-      ? JSON.stringify({
-          status: "OK",
-          data: new User(
-            Number(JSON.parse(data)[0].id),
-            JSON.parse(data)[0].username,
-            JSON.parse(data)[0].rank,
-          )
-        })
-      : JSON.stringify({ status: "failed", reason: "Incorrect password" });
+  public async countDocuments(query: queryParams): Promise<number> {
+    return await this._database.collection(query.collection).countDocuments();
   }
 }

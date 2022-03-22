@@ -31,6 +31,10 @@ export default class DeleteUserPage extends React.Component {
     this.getData();
   }
 
+  componentDidMount(){
+    document.title = "Face Recognition - Delete User"
+  }
+
   onMessage(msg: any) {
     let data = JSON.parse(this.WSClient.decoder.decode(msg.data));
     if (data.header == "DeleteUserEvent") {
@@ -87,7 +91,8 @@ export default class DeleteUserPage extends React.Component {
               <div className="flex items-center">
                 <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
                   <img
-                    className="rounded-full" draggable={false}
+                    className="rounded-full"
+                    draggable={false}
                     src={
                       "data:image/png;base64," + JSON.parse(info.train_data)[0]
                     }
@@ -118,7 +123,6 @@ export default class DeleteUserPage extends React.Component {
                 className=" hover:bg-gray-200 text-gray-800 font-bold py-2 px-1 rounded inline-flex items-center"
                 id={"btn-del-" + info.id}
               >
-                
                 <img draggable={false} src={delete_icon} />
               </button>
             </td>

@@ -10,16 +10,17 @@ export class StatsCard extends React.Component {
 
   state = {
     runtime: 0,
-    countUser:0,
-    countStaff:0
+    countUser: 0,
+    countStaff: 0,
   };
   constructor(props = {}) {
     super(props);
   }
-  componentDidMount(){
-    this.loading = false
+  componentDidMount() {
+    this.loading = false;
     this.getData();
-    this.timer = setInterval(() => { // renders again => clock will work
+    this.timer = setInterval(() => {
+      // renders again => clock will work
       this.setState({
         runtime: Math.round(
           (Number(Math.round(Date.now() / 1000)) -
@@ -43,21 +44,21 @@ export class StatsCard extends React.Component {
         },
         withCredentials: true,
       })
-      .then(async(resp) => {
-       // console.log(resp.data)
-        if(!this.loading){
-        this.start_time = await resp.data.start_time;
-        this.setState({
-          runtime: Math.round(
-            (Number(Math.round(Date.now() / 1000)) -
-              Number(Math.round(this.start_time))) /
-              60
-          ),
-          countUser:resp.data.countUser,
-          countStaff:resp.data.countStaff
-        });
-      }
-    });
+      .then(async (resp) => {
+        // console.log(resp.data)
+        if (!this.loading) {
+          this.start_time = await resp.data.start_time;
+          this.setState({
+            runtime: Math.round(
+              (Number(Math.round(Date.now() / 1000)) -
+                Number(Math.round(this.start_time))) /
+                60
+            ),
+            countUser: resp.data.countUser,
+            countStaff: resp.data.countStaff,
+          });
+        }
+      });
   }
 
   render(): React.ReactNode {
@@ -123,7 +124,9 @@ export class StatsCard extends React.Component {
               </div>
               <div>
                 <div className="text-gray-400">Users</div>
-                <div className="text-2xl font-bold text-gray-900">{this.state.countUser}</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {this.state.countUser}
+                </div>
               </div>
             </div>
           </div>
@@ -157,7 +160,9 @@ export class StatsCard extends React.Component {
               </div>
               <div>
                 <div className="text-gray-400">Staffs</div>
-                <div className="text-2xl font-bold text-gray-900">{this.state.countStaff}</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {this.state.countStaff}
+                </div>
               </div>
             </div>
           </div>
@@ -165,12 +170,31 @@ export class StatsCard extends React.Component {
             <div className="flex items-center space-x-4">
               <div>
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-50 text-emerald-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 12v-6h-2v8h7v-2h-5z"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 12v-6h-2v8h7v-2h-5z" />
+                  </svg>
                 </div>
               </div>
               <div>
                 <div className="text-gray-400">Clock</div>
-                <div className="text-2xl font-bold text-gray-900">{((new Date().getHours().toString().length > 1) ? new Date().getHours() : "0"+new Date().getHours()) + ":" + ((new Date().getMinutes().toString().length > 1) ? new Date().getMinutes() : "0"+new Date().getMinutes()) + ":"+ ((new Date().getSeconds().toString().length > 1) ? new Date().getSeconds() : "0"+new Date().getSeconds())}</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {(new Date().getHours().toString().length > 1
+                    ? new Date().getHours()
+                    : "0" + new Date().getHours()) +
+                    ":" +
+                    (new Date().getMinutes().toString().length > 1
+                      ? new Date().getMinutes()
+                      : "0" + new Date().getMinutes()) +
+                    ":" +
+                    (new Date().getSeconds().toString().length > 1
+                      ? new Date().getSeconds()
+                      : "0" + new Date().getSeconds())}
+                </div>
               </div>
             </div>
           </div>

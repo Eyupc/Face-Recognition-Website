@@ -6,6 +6,9 @@ export default class ExportPage extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    document.title = "Face Recognition - Loading.."
+  }
   render() {
     return (
       <div className="bg-[#ededed] flex flex-row justify-center items-center h-screen">

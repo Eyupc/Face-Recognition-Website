@@ -9,15 +9,15 @@ import jsonToken, { JsonWebTokenError } from "jsonwebtoken";
 import jwt from "jwt-decode";
 import RedisClient from "../Redis/RedisClient";
 import jwtDecode from "jwt-decode";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 
-import Login from "./routes/Login"
+import Login from "./routes/Login";
 import Check from "./routes/auth/Check";
-import Logout from "./routes/auth/Logout"
-import DeleteUsers from "./routes/admin/DeleteUsers/DeleteUsers"
-import cmdDelete from "./routes/admin/DeleteUsers/cmdDelete"
-import Home from "./routes/admin/Home"
-import AddAdmin from "./routes/admin/AddAdmin"
+import Logout from "./routes/auth/Logout";
+import DeleteUsers from "./routes/admin/DeleteUsers/DeleteUsers";
+import cmdDelete from "./routes/admin/DeleteUsers/cmdDelete";
+import Home from "./routes/admin/Home";
+import AddAdmin from "./routes/admin/AddAdmin";
 export class HTTPServer {
   private _host: string;
   private _port: number;
@@ -29,7 +29,7 @@ export class HTTPServer {
 
   private redisTimer: any;
 
-  constructor(host: string, port: number) { 
+  constructor(host: string, port: number) {
     this._host = host;
     this._port = port;
     this._express.set("port", port);
@@ -57,11 +57,11 @@ export class HTTPServer {
       res.send(JSON.stringify(req.cookies));
     });
 
-    this._express.post("/auth/login",Login);
+    this._express.post("/auth/login", Login);
     this._express.get("/auth/check", Check);
     this._express.post("/auth/logout", Logout);
     this._express.get("/admin/deleteUsers", DeleteUsers);
-    this._express.get("/admin/deleteUsers/cmd_delete",cmdDelete);
+    this._express.get("/admin/deleteUsers/cmd_delete", cmdDelete);
     this._express.get("/admin/home", Home);
     this._express.get("/admin/addAdmin", AddAdmin);
   }
@@ -87,11 +87,15 @@ export class HTTPServer {
   private async clearRedis() {
     var tokens = await RedisClient.getClient().hKeys("tokens");
     tokens.forEach((element) => {
-      jsonToken.verify(element, HTTPServer.secret, async (err: any, user: any) => {
-        if (err) {
-          await RedisClient.getClient().hDel("tokens", element);
+      jsonToken.verify(
+        element,
+        HTTPServer.secret,
+        async (err: any, user: any) => {
+          if (err) {
+            await RedisClient.getClient().hDel("tokens", element);
+          }
         }
-      });
+      );
     });
   }
 }

@@ -6,7 +6,7 @@ import jwt from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import login_img from "../../images/login_faces.jpg";
 import { configuration } from "../../configuration";
-import cogoToast from 'cogo-toast';
+import cogoToast from "cogo-toast";
 
 type UserData = {
   username: string;
@@ -20,8 +20,11 @@ export default class LoginPage extends React.Component<{}, UserData> {
     this.state = {
       username: "",
       password: "",
-      redirect: false,   
-    }
+      redirect: false,
+    };
+  }
+  componentDidMount(){
+    document.title = "Face Recognition - Login"
   }
 
   async tryToLogin() {
@@ -39,14 +42,16 @@ export default class LoginPage extends React.Component<{}, UserData> {
       .then((resp) => {
         if (resp.data.status === "OK") {
           const decoded = jwt(resp.data.token);
-          cogoToast.success("You are successfully logged in!",{position:"top-right"})
-          this.setState({ redirect: true});
-        }else{
-        cogoToast.error(resp.data.reason,{position:"top-right"})
+          cogoToast.success("You are successfully logged in!", {
+            position: "top-right",
+          });
+          this.setState({ redirect: true });
+        } else {
+          cogoToast.error(resp.data.reason, { position: "top-right" });
         }
-    })
+      })
       .catch((err) => {
-        cogoToast.error("Back-end is offline :(",{position:"top-left"})
+        cogoToast.error("Back-end is offline :(", { position: "top-left" });
       });
   }
 

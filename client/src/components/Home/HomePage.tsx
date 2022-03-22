@@ -17,6 +17,9 @@ export default class HomePage extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    document.title = "Face Recognition - Home"
+  }
   render() {
     return (
       <div className="flex flex-col justify-center items-center h-full xl:h-screen md:h-screen lg:h-screen sm:h-screen">

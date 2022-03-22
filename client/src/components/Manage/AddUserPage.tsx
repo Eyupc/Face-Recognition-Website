@@ -25,6 +25,10 @@ export class AddUserPage extends React.Component<{}, State> {
     };
   }
 
+  componentDidMount(){
+    document.title = "Face Recognition - Add User"
+  }
+
   onMessage(msg: any) {
     let data = JSON.parse(this.WSClient.decoder.decode(msg.data));
     if (data.header == "AddUserEvent") {
@@ -67,10 +71,6 @@ export class AddUserPage extends React.Component<{}, State> {
         img = data.replace("data:", "").replace(/^.+,/, "");
 
         this.images_encoded.push(img);
-        // document.getElementById("img")!.setAttribute("src",'data:image/jpg;base64,'+img)
-        //console.log(this.state.images_encoded)
-
-        //document.getElementById("image")!.setAttribute("src",img);
       });
     }
   }

@@ -15,6 +15,9 @@ export default class AddAdminPage extends React.Component {
     added: false,
   };
 
+  componentDidMount(){
+    document.title = "Face Recognition - Add Admin"
+  }
   async AddUser() {
     await axios
       .get(configuration.API_URL + "/admin/addAdmin", {
@@ -31,7 +34,7 @@ export default class AddAdminPage extends React.Component {
         withCredentials: true,
       })
       .then(async (resp) => {
-          console.log(resp.data)
+        console.log(resp.data);
         if (resp.data.status == "OK") {
           this.setState({
             user_added_alert: true,
