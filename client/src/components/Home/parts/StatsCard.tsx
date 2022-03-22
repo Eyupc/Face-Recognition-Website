@@ -1,6 +1,5 @@
 import axios from "axios";
-import React, { FC } from "react";
-import { clearInterval } from "timers";
+import React from "react";
 import { configuration } from "../../../configuration";
 
 export class StatsCard extends React.Component {
@@ -16,19 +15,22 @@ export class StatsCard extends React.Component {
   constructor(props = {}) {
     super(props);
   }
-  componentDidMount() {
+  async componentDidMount() {
     this.loading = false;
-    this.getData();
-    this.timer = setInterval(() => {
-      // renders again => clock will work
-      this.setState({
-        runtime: Math.round(
-          (Number(Math.round(Date.now() / 1000)) -
-            Number(Math.round(this.start_time))) /
-            60
-        ),
-      });
-    }, 1000);
+    await this.getData();
+
+    if (this.start_time !== 0) {
+      this.timer = setInterval(() => {
+        // renders again => clock will work
+        this.setState({
+          runtime: Math.round(
+            (Number(Math.round(Date.now() / 1000)) -
+              Number(Math.round(this.start_time))) /
+              60
+          ),
+        });
+      }, 1000);
+    }
   }
 
   componentWillUnmount() {
@@ -48,15 +50,17 @@ export class StatsCard extends React.Component {
         // console.log(resp.data)
         if (!this.loading) {
           this.start_time = await resp.data.start_time;
-          this.setState({
-            runtime: Math.round(
-              (Number(Math.round(Date.now() / 1000)) -
-                Number(Math.round(this.start_time))) /
-                60
-            ),
-            countUser: resp.data.countUser,
-            countStaff: resp.data.countStaff,
-          });
+          if (this.start_time !== 0) {
+            this.setState({
+              runtime: Math.round(
+                (Number(Math.round(Date.now() / 1000)) -
+                  Number(Math.round(this.start_time))) /
+                  60
+              ),
+              countUser: resp.data.countUser,
+              countStaff: resp.data.countStaff,
+            });
+          }
         }
       });
   }
