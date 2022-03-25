@@ -2,6 +2,7 @@ import React, { SyntheticEvent } from "react";
 import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
 import imageCompression from "browser-image-compression";
+import cogoToast from "cogo-toast";
 
 type State = {
   user_added_alert: boolean;
@@ -12,6 +13,8 @@ export class AddUserPage extends React.Component<{}, State> {
   private reader = new FileReader();
   private WSClient: WSClient;
   private ws: WebSocket;
+
+  private _isReading = false;
 
   constructor(props = {}) {
     super(props);
@@ -53,6 +56,7 @@ export class AddUserPage extends React.Component<{}, State> {
   }
 
   async fileSelectedHandler(e: any): Promise<void> {
+    this._isReading = true;
     const options = {
       maxSizeMB: 1,
       maxWidthOrHeight: 500,
@@ -73,6 +77,8 @@ export class AddUserPage extends React.Component<{}, State> {
         this.images_encoded.push(img);
       });
     }
+    
+    this._isReading = false;
   }
 
   getBase64(file: any) {
@@ -86,8 +92,14 @@ export class AddUserPage extends React.Component<{}, State> {
 
   onSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    if (this.images_encoded.length == 0) return;
+    if(this._isReading){
+      cogoToast.error("Wait, a second.. Images are encoding..", { position: "top-right" });    
+    }else{
+    if (this.images_encoded.length == 0){ 
+      cogoToast.error("Only images are allowed!.", { position: "top-right" });    
+     }else{;
 
+      console.log(this.images_encoded.length)
     let json = {
       header: "AddUserEvent",
       data: [
@@ -108,6 +120,8 @@ export class AddUserPage extends React.Component<{}, State> {
     (document.getElementById("files") as HTMLInputElement)!.value = "";
 
     this.images_encoded.length = 0;
+  }
+}
   }
 
   PopUpClose() {
