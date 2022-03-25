@@ -10,7 +10,7 @@ export default class StatsChart extends React.Component<ApexChart, any> {
       series: [
         {
           name: "Desktops",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+          data: [10, 41, 35, 51, 49, 62],
         },
       ],
       options: {
@@ -28,7 +28,7 @@ export default class StatsChart extends React.Component<ApexChart, any> {
           curve: "straight",
         },
         title: {
-          text: "Product Trends by Month",
+          text: "Recognized amount of people",
           align: "left",
         },
         grid: {
@@ -39,15 +39,12 @@ export default class StatsChart extends React.Component<ApexChart, any> {
         },
         xaxis: {
           categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Sat",
+            "Sun",
           ],
         },
       },
