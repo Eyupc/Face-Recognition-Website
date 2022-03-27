@@ -58,7 +58,7 @@ export class AddUserPage extends React.Component<{}, State> {
   async fileSelectedHandler(e: any): Promise<void> {
     this._isReading = true;
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 0.2,
       maxWidthOrHeight: 500,
       useWebWorker: true,
     };
@@ -97,7 +97,7 @@ export class AddUserPage extends React.Component<{}, State> {
     }else{
     if (this.images_encoded.length == 0){ 
       cogoToast.error("Only images are allowed!.", { position: "top-right" });    
-     }else{;
+     }else{
 
       console.log(this.images_encoded.length)
     let json = {
