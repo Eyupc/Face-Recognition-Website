@@ -6,6 +6,7 @@ import NavBar from "../static-parts/NavBar";
 import delete_icon from "../../images/delete_icon.png";
 import Pagination from "@mui/material/Pagination";
 import { WSClient } from "../../websocket/WSClient";
+import cogoToast from "cogo-toast";
 
 export default class DeleteUserPage extends React.Component {
   private users: any = [];
@@ -140,6 +141,7 @@ export default class DeleteUserPage extends React.Component {
   };
 
   async delete(id: number) {
+    if(this.ws.readyState === this.ws.OPEN){
     await axios
       .get(configuration.API_URL + "/admin/deleteUsers/cmd_delete", {
         params: {
@@ -172,6 +174,9 @@ export default class DeleteUserPage extends React.Component {
           await this.SendData(JSON.stringify(json));
         }
       });
+    }else {
+      cogoToast.error("WebSocket connection is closed!",{position:"top-center"})
+    }
   }
 
   //TODO WEBSOCKETS

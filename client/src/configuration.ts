@@ -1,4 +1,4 @@
 export const configuration = {
-  API_URL: "http://192.168.0.180:8080",
+  API_URL: "http://10.3.41.63:8080",
 };
 

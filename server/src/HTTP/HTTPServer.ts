@@ -38,7 +38,7 @@ export class HTTPServer {
     this._express.use(bodyParser.json());
     this._express.use(
       cors({
-        origin: ["http://localhost:3000", "http://192.168.0.180:3000"],
+        origin: ["http://localhost:3000", "http://192.168.0.180:3000","http://10.3.41.63:3000"],
         methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
         credentials: true,
       })

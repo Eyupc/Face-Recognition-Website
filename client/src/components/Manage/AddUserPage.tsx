@@ -3,6 +3,7 @@ import { WSClient } from "../../websocket/WSClient";
 import NavBar from "../static-parts/NavBar";
 import imageCompression from "browser-image-compression";
 import cogoToast from "cogo-toast";
+import { positions } from "@mui/system";
 
 type State = {
   user_added_alert: boolean;
@@ -99,7 +100,9 @@ export class AddUserPage extends React.Component<{}, State> {
       cogoToast.error("Only images are allowed!.", { position: "top-right" });    
      }else{
 
-      console.log(this.images_encoded.length)
+      if(this.ws.readyState === this.ws.OPEN){
+
+      //console.log(this.images_encoded.length)
     let json = {
       header: "AddUserEvent",
       data: [
@@ -120,6 +123,10 @@ export class AddUserPage extends React.Component<{}, State> {
     (document.getElementById("files") as HTMLInputElement)!.value = "";
 
     this.images_encoded.length = 0;
+  }
+  else{
+    cogoToast.error("WebSocket connection is closed!",{position:"top-center"})
+  }
   }
 }
   }

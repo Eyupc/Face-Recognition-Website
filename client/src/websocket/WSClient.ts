@@ -1,3 +1,4 @@
+import cogoToast from "cogo-toast";
 import React, { useState } from "react";
 
 export class WSClient {
@@ -24,20 +25,25 @@ export class WSClient {
 
   public static getInstance() {
     if (WSClient.ws === undefined) {
-      WSClient.ws = new WSClient("192.168.0.180", 7777, false, "HomePage");
+      WSClient.ws = new WSClient("10.3.41.63", 7777, false, "HomePage");
     }
     return WSClient.ws;
   }
 
   onError(err: any) {
     console.log(err);
+    cogoToast.error("WebSocket connection is closed!",{position:"top-center"})
+
   }
 
   onClose() {
     clearInterval(this.PingEvent);
     console.log("Connection closed!");
+
+   setTimeout(this.tryToReconnect,5000);
   }
   onOpen(): void {
+    cogoToast.success("Connected with WebSocket",{position:"top-center"})
     this._userid = Math.random().toString(36).substring(2);
     let connection = {
       header: "ConnectionEvent",
@@ -65,6 +71,11 @@ export class WSClient {
     this.PingEvent = setInterval(function () {
       websocket.send(encoder.encode(JSON.stringify(data))); //send ping
     }, 1000); //every 3 secs a ping pong event
+  }
+
+  private tryToReconnect(){
+    WSClient.ws = new WSClient("10.3.41.63", 7777, false, "HomePage");
+    cogoToast.loading("[WS] - Trying to reconnect...")
   }
 
   get websocket() {
