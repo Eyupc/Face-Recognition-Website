@@ -11,15 +11,19 @@ router.get("/admin/home", async (req, res, next) => {
     return;
   }
 
-  let start_time = await Main.databaseService.queryFind({
+  let data = await Main.databaseService.queryFind({
     collection: "stats",
     params: {},
   });
 
-  if (JSON.parse(start_time).status == "failed") {
-    start_time = "0";
+  let start_time = 0
+  let chartData = {};
+
+  if (JSON.parse(data).status == "failed") {
+    start_time = 0;
   } else {
-    start_time = JSON.parse(start_time)[0].start_time;
+    start_time = JSON.parse(data)[0].start_time;
+    chartData = JSON.parse(data)[0].recognized_amount;
   }
   let countStaff = await Main.databaseService.countDocuments({
     collection: "staffs",
@@ -34,6 +38,7 @@ router.get("/admin/home", async (req, res, next) => {
     start_time: start_time,
     countUser: countUser,
     countStaff: countStaff,
+    chartData:chartData
   });
 });
 export default router;

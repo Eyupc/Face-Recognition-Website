@@ -139,6 +139,10 @@ type ApexChart = {
     autoScaleYaxis?: boolean;
     target?: string;
   };
+
+  
+  chartData:{};
+  
   id?: string;
   group?: string;
   locales?: ApexLocale[];
