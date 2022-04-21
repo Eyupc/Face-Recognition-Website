@@ -25,7 +25,7 @@ export class WSClient {
 
   public static getInstance() {
     if (WSClient.ws === undefined) {
-      WSClient.ws = new WSClient("10.3.41.63", 7777, false, "HomePage");
+      WSClient.ws = new WSClient("10.2.0.74", 7777, false, "HomePage");
     }
     return WSClient.ws;
   }
@@ -74,7 +74,7 @@ export class WSClient {
   }
 
   private tryToReconnect(){
-    WSClient.ws = new WSClient("10.3.41.63", 7777, false, "HomePage");
+    WSClient.ws = new WSClient("10.2.0.74", 7777, false, "HomePage");
     cogoToast.loading("[WS] - Trying to reconnect...")
   }
 

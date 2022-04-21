@@ -25,14 +25,16 @@ export default class StatsChart extends React.Component<ApexChart, any> {
         withCredentials: true,
       })
       .then(async (resp) => {
+  
         // console.log(resp.data)
         if (!this.loading) {
             let chartData  = await resp.data.chartData
+            console.log(chartData.Thursday)
             this.setState ({
               series: [
                 {
                   name: "Amount",
-                  data: [chartData.Monday, chartData.Tuesday, chartData.Wednesday,chartData.Thursday, chartData.Friday, chartData.Saturday, chartData.Sunday],
+                  data: [Number(chartData.Monday), Number(chartData.Tuesday), Number(chartData.Wednesday),Number(chartData.Thursday), Number(chartData.Friday), Number(chartData.Saturday), Number(chartData.Sunday)],
                 },
               ],
               options: {
@@ -56,7 +58,7 @@ export default class StatsChart extends React.Component<ApexChart, any> {
                 grid: {
                   row: {
                     colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-                    opacity: 0.5,
+                    opacity: 1,
                   },
                 },
                 xaxis: {
