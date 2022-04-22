@@ -52,7 +52,7 @@ export default class StatsChart extends React.Component<ApexChart, any> {
                   curve: "straight",
                 },
                 title: {
-                  text: "Recognized amount of people this week",
+                  text: "Recognized amount of faces this week",
                   align: "left",
                 },
                 grid: {
