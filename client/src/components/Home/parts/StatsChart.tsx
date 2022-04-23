@@ -29,7 +29,7 @@ export default class StatsChart extends React.Component<ApexChart, any> {
         // console.log(resp.data)
         if (!this.loading) {
             let chartData  = await resp.data.chartData
-            console.log(chartData.Thursday)
+            //console.log(chartData.Thursday)
             this.setState ({
               series: [
                 {
