@@ -8,6 +8,7 @@ import Pagination from "@mui/material/Pagination";
 import { WSClient } from "../../websocket/WSClient";
 import cogoToast from "cogo-toast";
 
+
 export default class DeleteUserPage extends React.Component {
   private users: any = [];
   private maxPages: number = 1; // maximum paginas
@@ -99,7 +100,7 @@ export default class DeleteUserPage extends React.Component {
                     }
                     width="40"
                     height="40"
-                    alt="Alex Shatov"
+                    alt="Image"
                   />
                 </div>
                 <div className="font-medium text-gray-800">
@@ -109,7 +110,7 @@ export default class DeleteUserPage extends React.Component {
             </td>
 
             <td className="p-2 whitespace-nowrap">
-              <div className="text-left font-medium text-green-500">
+              <div className="text-left font-medium text-blue-400">
                 {info.age}
               </div>
             </td>
@@ -141,7 +142,6 @@ export default class DeleteUserPage extends React.Component {
   };
 
   async delete(id: number) {
-    if(this.ws.readyState === this.ws.OPEN){
     await axios
       .get(configuration.API_URL + "/admin/deleteUsers/cmd_delete", {
         params: {
@@ -160,8 +160,11 @@ export default class DeleteUserPage extends React.Component {
               this.setState({ currentPage: this.state.currentPage - 1 });
             }
           }
+          cogoToast.success("You have successfully deleted this user! (id: " + id.toString() + ")",{position:"top-right"})
           await this.getData();
           await this.getRows(this.state.currentPage);
+          
+          if(this.ws.readyState === this.ws.OPEN){
           let json = {
             header: "DeleteUserEvent",
             data: [
@@ -173,10 +176,8 @@ export default class DeleteUserPage extends React.Component {
           };
           await this.SendData(JSON.stringify(json));
         }
+      }
       });
-    }else {
-      cogoToast.error("WebSocket connection is closed!",{position:"top-center"})
-    }
   }
 
   //TODO WEBSOCKETS
