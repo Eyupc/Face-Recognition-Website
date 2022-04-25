@@ -94,7 +94,7 @@ export class AddUserPage extends React.Component<{}, State> {
   onSubmit(e: SyntheticEvent) {
     e.preventDefault();
     if(this._isReading){
-      cogoToast.error("Wait, a second.. Images are encoding..", { position: "top-right" });    
+      cogoToast.error("Try again after a few seconds.. Images are encoding..", { position: "top-right" });    
     }else{
     if (this.images_encoded.length == 0){ 
       cogoToast.error("Only images are allowed!.", { position: "top-right" });    

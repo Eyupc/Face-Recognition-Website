@@ -172,6 +172,25 @@ export default class NavBar extends React.Component<{}, Props> {
                 <></>
               )}
 
+        {AuthManager.rank > 1 ? ( // check if rank is greater than 1
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      (isActive
+                        ? "md:text-blue-700 bg-blue-700"
+                        : "md:hover:text-cyan-700 0 bg-[#adc9eb]") +
+                      " md:bg-transparent block pl-3 pr-4 py-2 md:p-0 rounded"
+                    }
+                    to="/manage/deleteAdmin"
+                    end
+                  >
+                    Delete admin
+                  </NavLink>
+                </li>
+              ) : (
+                <></>
+              )}
+
               <li>
                 <NavLink
                   onClick={() => this.logout()}

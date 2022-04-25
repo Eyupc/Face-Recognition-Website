@@ -40,7 +40,7 @@ export class WSClient {
     clearInterval(this.PingEvent);
     console.log("Connection closed!");
 
-   setTimeout(this.tryToReconnect,5000);
+   setTimeout(this.tryToReconnect,10000);
   }
   onOpen(): void {
     cogoToast.success("Connected with WebSocket",{position:"top-center"})

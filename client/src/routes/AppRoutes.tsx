@@ -17,6 +17,7 @@ import { ErrorPage } from "../components/Error/ErrorPage";
 import LoadingPage from "../components/Loading/LoadingPage";
 import DeleteUserPage from "../components/Manage/DeleteUserPage";
 import AddAdminPage from "../components/Manage/AddAdminPage";
+import DeleteAdminPage from "../components/Manage/DeleteAdminPage";
 
 export default class AppRoutes extends React.Component<{}> {
   constructor(props = {}) {
@@ -40,6 +41,7 @@ export default class AppRoutes extends React.Component<{}> {
 
           <Route path="/" element={<ProtectedRoutes auth={true} rank={2} />}>
             <Route path="/manage/addAdmin" element={<AddAdminPage />} />
+            <Route path="/manage/deleteAdmin" element={<DeleteAdminPage/>}/>
           </Route>
 
           <Route path="*" element={<ErrorPage />} />

@@ -27,6 +27,15 @@ export default class DatabaseService {
     if (q.length > 0) return result;
     else return JSON.stringify({ status: "failed" });
   }
+  public async queryFindFilter(query: queryParams): Promise<string> {
+    let q = await this._database
+      .collection(query.collection)
+      .find({}) //TODO
+      .toArray();
+    let result = String(JSON.stringify(q));
+    if (q.length > 0) return result;
+    else return JSON.stringify({ status: "failed" });
+  }
 
   public async lastDocument(
     query: queryParams
