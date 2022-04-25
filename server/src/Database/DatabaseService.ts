@@ -1,4 +1,4 @@
-import mongo, { Collection, InsertOneResult, MongoClient } from "mongodb";
+import mongo, { Collection, FindOptions, InsertOneResult, MongoClient } from "mongodb";
 import { User } from "../User/User";
 import bcrypt from "bcrypt";
 type queryParams = {
@@ -30,7 +30,7 @@ export default class DatabaseService {
   public async queryFindFilter(query: queryParams): Promise<string> {
     let q = await this._database
       .collection(query.collection)
-      .find({}) //TODO
+      .find({},{projection:query.params}) //TODO
       .toArray();
     let result = String(JSON.stringify(q));
     if (q.length > 0) return result;
