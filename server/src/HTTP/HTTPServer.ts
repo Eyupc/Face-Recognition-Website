@@ -19,6 +19,7 @@ import cmdDelete from "./routes/admin/DeleteUsers/cmdDelete";
 import Home from "./routes/admin/Home";
 import AddAdmin from "./routes/admin/AddAdmin";
 import DeleteAdmin from "./routes/admin/DeleteAdmin/DeleteAdmin"
+import cmdDeleteAdmin from "./routes/admin/DeleteAdmin/cmd_delete"
 export class HTTPServer {
   private _host: string;
   private _port: number;
@@ -67,6 +68,7 @@ export class HTTPServer {
     this._express.get("/admin/addAdmin", AddAdmin);
 
     this._express.get("/admin/deleteAdmin",DeleteAdmin)
+    this._express.get("/admin/deleteAdmin/cmd_delete",cmdDeleteAdmin)
   }
 
   public get port(): number {
