@@ -4,9 +4,17 @@ import face_icon1 from "../../images/recognition_1_face.png";
 import axios from "axios";
 import jwt from "jwt-decode";
 import { Navigate } from "react-router-dom";
-import login_img from "../../images/login_faces.jpg";
 import { configuration } from "../../configuration";
 import cogoToast from "cogo-toast";
+import { Slide } from 'react-slideshow-image';
+
+import login_img from "../../images/login_faces.jpg";
+import login_fc1 from "../../images/login_fc1.jpg"
+import login_fc2 from "../../images/login_fc2.jpg"
+import login_fc3 from "../../images/login_fc3.png"
+import login_fc4 from "../../images/login_fc4.jpeg"
+import login_fc5 from "../../images/login_fc5.jpg"
+import { setInterval } from "timers/promises";
 
 type UserData = {
   username: string;
@@ -15,6 +23,14 @@ type UserData = {
 };
 
 export default class LoginPage extends React.Component<{}, UserData> {
+
+  private images = [
+    login_img,
+    login_fc1,
+    login_fc2,
+    login_fc4,
+    login_fc5]
+    
   constructor(props = {}) {
     super(props);
     this.state = {
@@ -25,6 +41,9 @@ export default class LoginPage extends React.Component<{}, UserData> {
   }
   componentDidMount(){
     document.title = "Face Recognition - Login"
+    window.setInterval(()=>{
+     (document.getElementById("fc-img") as HTMLInputElement).src =  this.images[Math.floor(Math.random() * this.images.length)]
+    },5000)
   }
 
   async tryToLogin() {
@@ -60,23 +79,25 @@ export default class LoginPage extends React.Component<{}, UserData> {
     await this.tryToLogin();
   }
 
+
+
   render() {
     if (this.state.redirect) return <Navigate to="/home" replace />;
-
     return (
       <div className="flex flex-col justify-center items-center h-screen">
         <form
           onSubmit={async (e) => this.onSubmit(e)}
           method="POST"
-          className="box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200 m4 rounded "
+          className="box-border h-72 w-auto h-auto p-4 border-4 bg-slate-200 m4 rounded shadow-2xl "
         >
           <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
             <div className="flex flex-col md:flex-row">
               <div className="h-32 md:h-auto md:w-1/2">
                 <img
+                  id="fc-img"
                   className="object-cover w-full h-full"
                   draggable="false"
-                  src={login_img}
+                  src={this.images[0]}
                   alt="img"
                 />
               </div>
