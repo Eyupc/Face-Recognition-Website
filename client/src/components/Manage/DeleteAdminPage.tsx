@@ -7,6 +7,8 @@ import delete_icon from "../../images/delete_icon.png";
 import Pagination from "@mui/material/Pagination";
 import { WSClient } from "../../websocket/WSClient";
 import cogoToast from "cogo-toast";
+import mod_icon from "../../images/moderator_icon.jpg"
+import admin_icon from "../../images/admin_icon.jpg"
 
 export default class DeleteAdminPage extends React.Component {
   private users: any = [];
@@ -21,12 +23,32 @@ export default class DeleteAdminPage extends React.Component {
 
   constructor(props = {}) {
     super(props);
+    this.getData()
   }
 
   componentDidMount(){
     document.title = "Face Recognition - Delete Admin"
   }
 
+  async getData() {
+    await axios
+      .get(configuration.API_URL + "/admin/deleteAdmin", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(async (resp) => {
+        this.users = resp.data;
+        this.maxPages =
+          this.users.length === undefined
+            ? 1
+            : Math.ceil(this.users.length / 4); //afronden nr de volgende grootste int
+        await this.getRows(this.state.currentPage);
+      })
+      .catch((err) => {});
+    this.setState({ isLoading: false });
+  }
 
 
   async getRows(page: number) {
@@ -52,27 +74,28 @@ export default class DeleteAdminPage extends React.Component {
                     className="rounded-full"
                     draggable={false}
                     src={
-                      "data:image/png;base64," + JSON.parse(info.train_data)[0]
+                     (info.rank == 1) ? mod_icon : admin_icon
                     }
                     width="40"
                     height="40"
-                    alt="Alex Shatov"
+                    alt="Image"
                   />
                 </div>
                 <div className="font-medium text-gray-800">
-                  {info.name + " " + info.lastname}
+                  {info.username}
                 </div>
               </div>
             </td>
 
             <td className="p-2 whitespace-nowrap">
-              <div className="text-left font-medium text-green-500">
-                {info.age}
+            <div className="text-center font-medium">
+                {info.email }
               </div>
             </td>
+            
             <td className="p-2 whitespace-nowrap">
-              <div className="text-lg text-center">
-                {JSON.parse(info.train_data).length}
+            <div className="text-center font-medium text-red-500">
+                {info.rank === 1 ? "Moderator" : "Admin"}
               </div>
             </td>
             <td className="p-2 flex justify-center whitespace-nowrap">
@@ -99,7 +122,7 @@ export default class DeleteAdminPage extends React.Component {
 
   async delete(id: number) {
     await axios
-      .get(configuration.API_URL + "/admin/deleteUsers/cmd_delete", {
+      .get(configuration.API_URL + "/admin/deleteAdmin/cmd_delete", {
         params: {
           id: id,
         },
@@ -116,6 +139,8 @@ export default class DeleteAdminPage extends React.Component {
               this.setState({ currentPage: this.state.currentPage - 1 });
             }
           }
+          cogoToast.success("You have successfully deleted this staff! (id: " + id.toString() + ")",{position:"top-right"})
+          await this.getData();
           await this.getRows(this.state.currentPage);
         }
       });
@@ -144,7 +169,9 @@ export default class DeleteAdminPage extends React.Component {
                         </div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Age</div>
+                        <div className="font-semibold text-center">
+                          E-mail
+                        </div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-center">
