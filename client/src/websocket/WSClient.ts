@@ -7,6 +7,7 @@ export class WSClient {
   private _decoder: TextDecoder = new TextDecoder();
   private _page: string;
   private PingEvent: any | undefined;
+
   private _userid = "";
 
   public static ws: WSClient | undefined;
@@ -25,7 +26,7 @@ export class WSClient {
 
   public static getInstance() {
     if (WSClient.ws === undefined) {
-      WSClient.ws = new WSClient("localhost", 7777, false, "HomePage");
+      WSClient.ws = new WSClient("192.168.0.180", 7777, false, "HomePage");
     }
     return WSClient.ws;
   }
@@ -74,7 +75,7 @@ export class WSClient {
   }
 
   private tryToReconnect(){
-    WSClient.ws = new WSClient("localhost", 7777, false, "HomePage");
+    WSClient.ws = new WSClient("192.168.0.180", 7777, false, "HomePage");
     cogoToast.loading("[WS] - Trying to reconnect...")
   }
 

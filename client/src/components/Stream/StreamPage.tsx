@@ -46,7 +46,7 @@ export class StreamPage extends React.Component<{}, MessageState> {
   render() {
     let message =
       this.ws.readyState === this.ws.OPEN ? (
-        <img src={this.state.image} />
+        <img src={this.state.image} width="100%" height="100%" />
       ) : (
         "[WS] - Connection closed :("
       );

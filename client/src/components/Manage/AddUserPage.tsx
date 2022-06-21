@@ -107,12 +107,12 @@ export class AddUserPage extends React.Component<{}, State> {
       header: "AddUserEvent",
       data: [
         {
-          id: this.WSClient.userId,
-          name: (document.getElementById("name") as HTMLInputElement)!.value,
-          lastname: (document.getElementById("lastname") as HTMLInputElement)!
+          id: this.WSClient.userId, //userId
+          name: (document.getElementById("name") as HTMLInputElement)!.value, //name
+          lastname: (document.getElementById("lastname") as HTMLInputElement)! //lastname
             .value,
-          age: (document.getElementById("age") as HTMLInputElement)!.value,
-          images: this.images_encoded,
+          age: (document.getElementById("age") as HTMLInputElement)!.value,//age
+          images: this.images_encoded,// images encoded to base64 & reduce quality of the images
         },
       ],
     };
